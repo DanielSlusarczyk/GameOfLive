@@ -1,21 +1,11 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
-
-/*
-HOW TO CALL THE PROGRAM
-
-with step by step mode disabled:
-./gameoflife.exe <input file> <number of generations>
-
-with step by step mode enabled:
-./gameoflife.exe -sts <input file> <number of generations>
-
-number of generations should always be >= 2
-*/
+#include"gameoflife.h"
 
 int main(int argc, char** argv)
 {
+    //obsluga bledow
     int sts = strcmp(argv[1], "-sts") == 0 ? 1 : 0;
     if(sts == 1)
     {
@@ -40,5 +30,26 @@ int main(int argc, char** argv)
             return 3;
         }
     }
+
+    //wczytywanie pliku do macierzy
+    int dims[2];
+    for(int i = 0; i < 2; i++)
+    {
+        fscanf(inputfile, "%d", &dims[i]);
+    }
+    printf("Loaded %d x %d matrix\n", dims[0], dims[1]);
+    char** matrix = calloc(dims[0], sizeof(char*));
+    fgetc(inputfile); //obgryzamy spacje/newline
+    for(int i = 0; i < dims[0]; i++)
+    {
+        matrix[i] = calloc(dims[1], sizeof(char));
+        for(int j = 0; j < dims[1]; j++)
+        {
+            matrix[i][j] = fgetc(inputfile);
+            printf("%c ", matrix[i][j]);
+        }
+        printf("\n");
+    }
+    
     return 0;
 }
