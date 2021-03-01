@@ -12,9 +12,17 @@ Komórki martwe - ożywają w kolejnej generacji jeżeli posiadają dokładnie t
 DANE WEJŚCIOWE:
 Program potrzebuje danych z informacjami o stanie wyjściowej planszy (generacji 0),
 oraz o liczbie generacji, którą użytkownik chce wygenerować.
-Plik wejściowy powinien zawierać pojedynczy ciąg znaków, sformatowany w następujący sposób:
-<liczba wierszy><liczba kolumn><zawartość kolejnych wierszy planszy>
-Gdzie żywe komórki oznaczone są jako '1', natomiast martwe jako '0'.
+Plik wejściowy powinien zawierać trzy linie, sformatowane następująco:
+1 <row> <col>
+2 <x1> <x2> ... <xn>
+3 <y1> <y2> ... <yn>
+Gdzie:
+row - liczba rzędów planszy
+col - liczba kolumn planszy
+x1, x2, ..., xn - współrzędne x-owe kolejnych żywych komórek
+y1, y2, ..., yn - współrzędne y-owe kolejnych żywych komórek
+(x1, y1) są współrzędnymi pierwszej żywej komórki, (x2, y2) - drugiej, itd.
+Współrzędne określamy względem klasycznego 2-wymiarowego kartezjańskiego układu współrzędnych.
 
 Przykładowo, jeżeli chcemy wczytać planszę 2x3 z jedną żywą komórką w lewym górnym rogu, oraz jedną w prawym dolnym rogu,
 plik powinien zawierać ciąg znaków "23100001"
