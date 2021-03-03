@@ -41,14 +41,14 @@ SCENARIUSZE DZIAŁANIA:
 Jeżeli program zostanie uruchomiony poprawnie, z poprawnie sformatowanym plikiem wejściowym, wyświetli on stan ostatniej zadanej generacji.
 W przypadku poprawnego uruchomienia z odpowiednimi flagami, mogą zostać pokazane wszystkie kolejne generacje, oraz końcowa generacja może poza wyświetleniem zostać zapisana do odpowiedniego pliku.
 Gdy zostaną użyte flagi, program wyświetli informację o ich uruchomieniu (np. "Uruchomiono w trybie step by step").
-W przypadkach niepoprawnego :
-1 - niepoprawna ilość argumentów uruchomienia programu
-2 - poprawna ilość, ale jeden lub więcej typów argumentów wywołania jest niewłaściwa, lub zostały umieszczone w niewłaściwej kolejności
-3 - użycie nieznanej flagi
-4 - nie można otworzyć podanego pliku wejściowego
-5 - niewłaściwa liczba generacji
-6 - w pliku wejściowym znajdują się wartości niebędące liczbami naturalnymi
-7 - w pliku wejściowym znajduje się za mało danych określających wymiary planszy
-8 - w pliku wejściowym liczba współrzędnych x-owych jest niezgodna z liczbą współrzędnych y-owych
-9 - wywołano z flagą "-save", ale nie podano nazwy pliku wynikowego
-10 - wywołano z flagą "-save" i podano nazwę pliku wynikowego, ale w danej lokalizacji już istnieje plik o tej nazwie
+W przypadkach niepoprawnego uruchomienia programu, zwracane są odpowiednie kody błędów:
+1: INCORRECT_NUMBER_OF_ARGS - niepoprawna ilość argumentów uruchomienia programu
+2: INCORRECT_ARGS - poprawna ilość, ale jeden lub więcej typów argumentów wywołania jest niewłaściwa, lub zostały umieszczone w niewłaściwej kolejności
+3: UNKNOWN_FLAG - użycie nieznanej flagi
+4: INPUT_ERR - nie można otworzyć podanego pliku wejściowego
+5: INCORRECT_GENS - niewłaściwa liczba generacji
+6: INPUT_NOT_NMBR - w pliku wejściowym znajdują się wartości niebędące liczbami naturalnymi
+7: INPUT_SHORT - w pliku wejściowym znajduje się za mało danych określających wymiary planszy
+8: INPUT_XY - w pliku wejściowym liczba współrzędnych x-owych jest niezgodna z liczbą współrzędnych y-owych
+9: NO_OUT - wywołano z flagą "-save", ale nie podano nazwy pliku wynikowego
+10: FILENAME_TAKEN- wywołano z flagą "-save" i podano nazwę pliku wynikowego, ale w danej lokalizacji już istnieje plik o tej nazwie
