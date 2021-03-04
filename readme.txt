@@ -52,3 +52,4 @@ W przypadkach niepoprawnego uruchomienia programu, zwracane są odpowiednie kody
 8: INPUT_XY - w pliku wejściowym liczba współrzędnych x-owych jest niezgodna z liczbą współrzędnych y-owych
 9: NO_OUT - wywołano z flagą "-save", ale nie podano nazwy pliku wynikowego
 10: FILENAME_TAKEN- wywołano z flagą "-save" i podano nazwę pliku wynikowego, ale w danej lokalizacji już istnieje plik o tej nazwie
+UWAGA: wyróżnia się szczególny przypadek w obrębie błędu FILENAME_TAKEN: jeżeli podana nazwa pliku wynikowego będzie taka sama, jak nazwa pliku wejściowego, przed zakończeniem działania, program zapyta użytkownika, czy nadpisać plik. Dzięki temu nie będzie konieczne uruchamianie programu od nowa, z flagą "-ovw".
