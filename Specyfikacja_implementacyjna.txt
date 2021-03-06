@@ -1,0 +1,31 @@
+The Game of Life - Specyfikacja Implementacyjna
+Daniel Ślusarczyk i Jakub Łaba
+
+SYSTEM OPERACYJNY (Jakub Łaba): Windows 10, Windows Subsystem for Linux
+JĘZYK: C
+WERSJA PROGRAMU: 
+WERSJA KOMPILATORA (Jakub Łaba)
+Windows 10: gcc 6.3.0
+WSL: gcc 9.3.0
+
+DIAGRAM MODUŁÓW
+Program składa się z dwóch modułów - tgol_file oraz tgol_evo.
+Każdy z modułów składa się z dwóch plików - nagłówkowego oraz pliku źródłowego C.
+Poza tym program zawiera plik tgol_main.c, zawierający funkcję main całego programu.
+
+OPIS MODUŁÓW/FUNKCJI
+Moduł tgol_file zawiera funkcje odpowiadające za obsługę plików w obrębie programu - wczytywanie, przetwarzanie danych oraz tworzenie nowych plików przez program.
+Moduł tgol_evo zawiera funkcje odpowiadające za ewolucję komórek na planszy.
+Moduły tgol_file oraz tgol_evo są od siebie niezależne (nie korzystają nawzajem ze swoich funkcji), plik tgol_main.c jest zależny od obydwu modułów. 
+
+SPOSÓB WPROWADZANIA ZMIAN I PRZEPROWADZANIA TESTÓW
+Do wprowadzania zmian w projekcie używany jest system kontroli wersji git.
+Z wyników testów będą tworzone zwięzłe raporty w postaci plików .txt i będą udostępniane całemu zespołowi za pośrednictwem gita.
+
+ROZWIĄZANIE PROBLEMU GRANICY PLANSZY
+Plansza będzie przechowywana w postaci macierzy, po której komórkach będzie iterować główna pętla programu.
+Jeżeli komórka znajduje się na skraju macierzy, to co najmniej jedna z jej współrzędnych jest skrajna, tj. równa 0 lub o 1 mniejsza od szerokości (w przypadku współrzędnej x) lub wysokości (w przypadku współrzędnej y) macierzy.
+Aby przy sprawdzaniu sąsiadów dookoła poszczególnych komórek uniknąć przekroczenia dozwolonego zakresu operatorami pętli, zakresy sprawdzania sąsiedztwa zostaną odpowiednio ograniczone dla skrajnych komórek.
+
+SPOSÓB TESTOWANIA
+Program obsługuje wiele różnych kodów błędów - w ramach testów program zostanie wywołany z odpowiednimi błędnymi parametrami zgodnie z ich opisami w specyfikacji funkcjonalnej, aby sprawdzić czy typy błędów są rozpoznawane prawidłowo.
