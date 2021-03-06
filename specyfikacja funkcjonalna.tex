@@ -1,0 +1,261 @@
+\documentclass[11pt,a4paper]{report}
+
+\usepackage{polski}
+\usepackage[utf8]{inputenc} 
+\usepackage{a4wide}
+\usepackage{tabularx}
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+
+%strona tytułowa
+\begin{titlepage}
+\title{\Huge Specyfikacja Funkcjonalna}
+\author{Daniel Ślusarczyk i Jakub Łaba}
+\date{10.03.2021}
+\end {titlepage}
+
+\renewcommand{\footrulewidth}{0pt}
+\begin{document}
+\maketitle
+
+% zmiana numeracji sekcji 0.X -> X
+\renewcommand*\thesection{\arabic{section}} 
+
+\begin{abstract}
+Dokument stanowi opis szczegółowy projektu "The Game of Life" oraz związany z nim zakres prac, funkcje programu, interakcje zachodzące między system
+a użytkownikiem i instrukcje użytkowania. 
+\end{abstract}
+
+%Numeracja stron
+\pagestyle{fancy}
+\fancyhf{}
+\rfoot{Strona \thepage \hspace{1pt} z \pageref{LastPage}}
+\setcounter{page}{0}
+
+% spis treści bez numeracji stron
+\fancypagestyle{plain}
+{
+\fancyhead{} 
+\fancyfoot{} 
+}
+\thispagestyle{empty} 
+\tableofcontents 
+\thispagestyle{empty}
+\newpage
+
+\fancypagestyle{plain} 
+{
+\fancyhead{} 
+\fancyfoot[C]{\thepage}
+}
+
+% pierwsza sekcja
+\section{Cel Projektu}\label{sec:tekst}
+Program emuluje działanie automatu komórkowego Johna Conwaya - Grę w Życie (ang. "The Game of Life").
+Na prostokątnej planszy znajdują się komórki żywe (zazwyczaj oznaczane kolorem czarnym) oraz martwe (zazwyczaj oznaczane kolorem białym, lub brakiem koloru).
+"Życie" na planszy toczy się przez określoną liczbę generacji, które są rozdzielone dyskretnymi odstępami czasowymi.
+W każdej generacji komórki ożywają/obumierają na następujących zasadach:\\
+Komórki żywe - pozostają żywe w kolejnej generacji jeżeli posiadają dokładnie 2 lub 3 żywych sąsiadów, w każdym innym przypadku umierają\\
+Komórki martwe - ożywają w kolejnej generacji jeżeli posiadają dokładnie trzech żywych sąsiadów, w przeciwnym przypadku pozostają martwe\\
+Komórki znadujące się poza planszą są uznawane za martwe. 
+
+% druga sekcja
+\section{Dane Wejściowe}\label{sec:teskt}
+Program potrzebuje danych z informacjami o stanie wyjściowej planszy (generacji 0),
+oraz o liczbie generacji, którą użytkownik chce wygenerować.
+Plik wejściowy powinien zawierać trzy linie, sformatowane następująco:\\
+1: row col\\
+2: x1 x2 ... xn\\
+3: y1 y2 ... yn\\
+Gdzie:
+\begin {itemize}
+\item row - liczba rzędów planszy
+\item col - liczba kolumn planszy
+\item x1, x2, ..., xn - współrzędne x-owe kolejnych żywych komórek
+\item y1, y2, ..., yn - współrzędne y-owe kolejnych żywych komórek
+\end {itemize}
+(x1, y1) są współrzędnymi pierwszej żywej komórki, (x2, y2) - drugiej, (xn, yn) - n-tej, itd.
+Współrzędne określa się względem klasycznego 2-wymiarowego kartezjańskiego układu współrzędnych.
+\subsubsection {Przykład}
+Chcąc wczytać planszę 2x3 z jedną żywą komórką w lewym górnym rogu, oraz jedną w prawym dolnym rogu,
+plik powinien wyglądać w następujący sposób: \\
+1: 2 3 \\
+2: 1 3 \\
+3: 2 1 
+\newpage
+
+% trzecia sekcja
+\section{Argumenty wywołania programu}\label{sec:teskt}
+\subsubsection {Niezbędne do uruchomienia programu:}
+plik wejściowy - ścieżka do pliku z informacjami o stanie planszy wyjściowej\\
+liczba generacji - liczba naturalna większa od 0, określająca pożądaną przez użytkownika liczbę generacji\\
+\subsubsection {Flagi opcjonalne:}
+Flagi należy umieścić jako ostatnie argumenty wywołania, poza nielicznymi wyjątkami opisanymi poniżej, ich kolejność względem siebie nawzajem nie jest istotna
+\begin {itemize}
+\item "-sbs" - tryb "step by step", tzn. program będzie pokazywał wszystkie generacje, czekając na kolejne instrukcje
+\item "-save" - program wywołany z tą flagą zapisze do pliku wynikowego ostatnią przeprowadzoną generację, sformatowaną identycznie jak plik wejściowy (dzięki temu można użyć pliku wynikowego jako wejścia do kolejnego uruchomienia programu), nazwę pliku wynikowego należy podać bezpośrednio po fladze "-save", w przypadku chęci zapisania pliku w innym folderze, należy podać jego nazwę razem z pożądaną ścieżką
+\item "-overwrite" - przy wywołaniu z tą flagą, ostatnia generacja zostanie nadpisana w pliku podanym jako wejściowy, nie można używać w połączeniu z flagą "-save"
+\item "-refresh" - program będzie odświeżał ekran, pokazując kolejne generacje, przy wywołaniu z tą flagą można od razu po niej podać wartośc w milisekundach, którą program ma odczekać pomiędzy odświeżeniami ekranu (1s = 1000ms), jeżeli wartośc nie zostanie podana, domyślna zostanie ustawiona na 100ms (0,1s), jeżeli zamiast wartości zostanie użyta flaga "-sbs", program będzie odświeżał ekran po wciśnięciu klawisza przez użytkownika
+\end {itemize}
+
+% czwarta sekcja
+\section{Uruchomienie programu}\label{sec:teskt}
+Program został przygotowany do uruchomienia w systemie Linux (zalecana dystrybucja: Ubuntu 20.04).\\
+Uruchomienie programu odbywa się poprzez wpisanie niezbędnych arugumentów wywołania programu w terminalu systemu Linux:\\
+./TGOL [plik wejściowy] [liczba generacji]
+\subsubsection{Przykład:}
+Znajdując się w folderze projektu i mając odpowiednio przygotowany plik wejściowy (zgodnie z punktem "dane wejściowe") pod nazwą "dane1" w folderze "generacje" i chcąc przeprowadzić 10 generacji oraz zapisać wynik w pliku "wynik" powinniśmy wpisać następujące polecenie:\\
+./TGOL generacje/dane1 10 -save wynik
+
+% piąta sekcja
+\section{Wynik działania programu}\label{sec:teskt}
+Wynikiem działania programu jest przeanalizowanie przez program wszystkich następujących generacji i wyświetlenie finalnej (zadeklarowanej w argumencie [liczba generacji]) w oknie terminala.
+Jeśli program został uruchomiony w trybie "step by step" to wynikiem działania pierwszego etapu będzie wyświetlenie kolejnej zachodzącej generacji i oczekiwania na kolejne komendy.
+Po osiągnięciu finalnej generacji w obu przypadkach program kończy działanie. Jeśli program został uruchomiony z flagą "- save" to wszystkie przeanalizowane generacje zostają zapisane w pliku podanym przez użytkownika w formacie zgodnym z danymi wejściowymi. Dodatkowo flaga "-overwrite" powoduje nadpisanie pliku. 
+
+% szósta sekcja
+\section{Scenariusz działania programu:}\label{sec:teskt}
+\subsection {Tryb podstawowy:}
+\subsubsection {Wywołanie:}
+		./TGOL [plik wejściowy] [liczba generacji] \\
+\subsubsection {Wynik:}
+		Przeprowadzenie przez program wszystkich generacji. Wyświetlenie informacji o ostatniej generacji w oknie terminala.\\
+
+\subsection {Tryb step by step:}
+\subsubsection {Wywołanie:}
+		./TGOL [plik wejściowy] [liczba generacji] -sbs\\
+\subsubsection {Wynik:}
+		Przeprowadzenie przez program pierwszej generacji. Wyświetlenie informacji na jej temat w oknie terminala. Czekanie na instrukcje od użytkownika.\\
+\subsubsection {Możliwe kroki:}
+\begin {itemize}
+\item Wpisanie polecenia "n"\\
+		Wynik:\\
+		Przeprowadzenie przez program kolejnej generacji. Wyświetlenie informacji na jej temat w oknie terminala. Czekanie na instrukcje od użytkownika.
+\item Wpisanie polecenia "continue"\\
+		Wynik:\\
+		Wyłączenie przez program trybu step by step. Przeprowadzenie przez program wszystkich pozostałych generacji.
+		Wyświetlenie informacji o ostatniej generacji w oknie terminala.
+\item Wpisanie polecenia "out"\\
+		Wynik:\\
+		Zakończenie działania programu.\\
+\end{itemize}
+
+% siódma sekcja
+\section {Rozszerzony scenariusz działania programu}\label{sec:teskt}
+\subsection[Tryb podstawowy] {Tryb podstawowy:}
+
+
+\subsubsection {Możliwe wyniki kończące działanie programu:}
+\begin{tabularx}{\textwidth}{  X|Xl  }
+ \hline
+ Komunikat                                   					& Przyczyna\\
+ \hline \hline
+			INCORRECT\_NUMBER\_OF\_ARGS	&Niepoprawna ilość argumentów uruchomienia programu\\
+ \hline
+			INCORRECT\_ARGS			&Poprawna ilość argumentów, ale jeden lub więcej typów argumentów wywołania jest niewłaściwa, lub zostały umieszczone w niewłaściwej kolejności\\
+ \hline
+			UNKNOWN\_FLAG	 			&Użycie nieznanej flagi\\
+ \hline
+			INPUT\_ERR					&Nie można otworzyć podanego pliku wejściowego\\
+ \hline
+			INCORRECT\_GENS				&Niewłaściwa liczba generacji\\
+ \hline
+			INPUT\_NOT\_INT			&W pliku wejściowym znajdują się wartości niebędące liczbami naturalnymi\\
+ \hline
+			INPUT\_SHORT				&W pliku wejściowym znajduje się za mało danych określających wymiary planszy\\
+ \hline
+			INPUT\_XY					&W pliku wejściowym liczba współrzędnych x-owych jest niezgodna z liczbą współrzędnych y-owych\\
+\hline
+			AMBIGUOUS\_OUT			&Użyto niedozwolonego połączenia flag "-save" oraz "-overwrite"\\
+ \hline
+			NO\_OUT					&Wywołano z flagą "-save", ale nie podano nazwy pliku wynikowego\\
+ \hline
+\end{tabularx}
+
+\subsubsection{Możliwe wyniki kontuujące działanie programu:}
+\begin{tabularx}{\textwidth}{  X|Xl  }
+\hline
+   Komunikat                                    				& Przyczyna\\
+\hline \hline
+			FILENAME\_TAKEN				&Wywołano z flagą "-save" i podano nazwę pliku wynikowego, ale w danej lokalizacji już istnieje plik o tej nazwie. Program pyta o chęć nadpisania pliku.\\
+\hline
+\end{tabularx}
+
+\subsection[Tryb step by step] {Tryb step by step:}
+
+\subsubsection {Możliwe wyniki kończące działanie programu:}
+\begin{tabularx}{\textwidth}{  X|Xl  }
+ \hline
+ Komunikat                                   					& Przyczyna\\
+ \hline \hline
+			INCORRECT\_NUMBER\_OF\_ARGS	&Niepoprawna ilość argumentów uruchomienia programu\\
+ \hline
+			INCORRECT\_ARGS			&Poprawna ilość, ale jeden lub więcej typów argumentów wywołania jest niewłaściwa, lub zostały umieszczone w niewłaściwej kolejności\\
+ \hline
+			UNKNOWN\_FLAG	 			&Użycie nieznanej flagi\\
+ \hline
+			INPUT\_ERR					&Nie można otworzyć podanego pliku wejściowego\\
+ \hline
+			INCORRECT\_GENS				&Niewłaściwa liczba generacji\\
+ \hline
+			INPUT\_NOT\_INT			&W pliku wejściowym znajdują się wartości niebędące liczbami naturalnymi\\
+ \hline
+			INPUT\_SHORT				&W pliku wejściowym znajduje się za mało danych określających wymiary planszy\\
+ \hline
+			INPUT\_XY					&W pliku wejściowym liczba współrzędnych x-owych jest niezgodna z liczbą współrzędnych y-owych\\
+ \hline
+			NO\_OUT					&Wywołano z flagą "-save", ale nie podano nazwy pliku wynikowego\\
+ \hline
+\end{tabularx}
+
+\subsubsection{Możliwe wyniki kontuujące działanie programu:}
+\begin{tabularx}{\textwidth}{  X|Xl  }
+\hline
+Komunikat                                    					& Przyczyna\\
+\hline \hline
+			INCORRECT\_ORDER			&Wpisano złe polecenie. Program kontynuuje czekanie na polecenie\\
+\hline
+
+\end{tabularx}
+
+\subsection[Tryb save] {Tryb save:}
+
+\subsubsection {Możliwe wyniki kończące działanie programu:}
+\begin{tabularx}{\textwidth}{  X|Xl  }
+ \hline
+ Komunikat                                   					& Przyczyna\\
+ \hline \hline
+			INCORRECT\_NUMBER\_OF\_ARGS	&Niepoprawna ilość argumentów uruchomienia programu\\
+ \hline
+			INCORRECT\_ARGS			&Poprawna ilość, ale jeden lub więcej typów argumentów wywołania jest niewłaściwa, lub zostały umieszczone w niewłaściwej kolejności\\
+ \hline
+			UNKNOWN\_FLAG	 			&Użycie nieznanej flagi\\
+ \hline
+			INPUT\_ERR					&Nie można otworzyć podanego pliku wejściowego\\
+ \hline
+			INCORRECT\_GENS				&Niewłaściwa liczba generacji\\
+ \hline
+			INPUT\_NOT\_INT			&W pliku wejściowym znajdują się wartości niebędące liczbami naturalnymi\\
+ \hline
+			INPUT\_SHORT				&W pliku wejściowym znajduje się za mało danych określających wymiary planszy\\
+ \hline
+			INPUT\_XY					&W pliku wejściowym liczba współrzędnych x-owych jest niezgodna z liczbą współrzędnych y-owych\\
+ \hline
+			NO\_OUT					&Wywołano z flagą "-save", ale nie podano nazwy pliku wynikowego\\
+ \hline
+\end{tabularx}
+
+\subsubsection{Możliwe wyniki kontuujące działanie programu:}
+\begin{tabularx}{\textwidth}{  X|Xl  }
+\hline
+Komunikat                                    					& Przyczyna\\
+\hline \hline
+
+			FILENAME\_TAKEN				&Wywołano z flagą "-save" i podano nazwę pliku wynikowego, ale w danej lokalizacji już istnieje plik o tej nazwie. Program pyta o chęć nadpisania pliku.\\
+\hline
+\end{tabularx}
+
+
+
+
+\end{document}
