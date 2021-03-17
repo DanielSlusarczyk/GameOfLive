@@ -51,7 +51,7 @@ podziale na moduły i sposobie działania.
 }
 
 % pierwsza sekcja
-\section{Cel Projektu (skrócona wersja z poprzedniego dokumentu)}\label{sec:tekst}
+\section{Cel projektu (skrócona wersja z dokumnetu "Specyfikacja Implementacyjna")}\label{sec:tekst}
 Program symuluje działanie automatu komórkowego Johna Conwaya - Grę w Życie (ang. "The Game of Life").\\
 Na prostokątnej planszy znajdują się komórki żywe oraz martwe.\\
 "Życie" na planszy toczy się przez określoną liczbę generacji, które są rozdzielone dyskretnymi odstępami czasowymi.\\
@@ -61,7 +61,7 @@ W każdej generacji komórki:\\
 
 
 % druga sekcja
-\section{Środowisko Powstawiania Programu}\label{sec:teskt}
+\section{Środowisko powstawiania programu}\label{sec:teskt}
 \begin{tabularx}{\textwidth}{  X|Xl  }
 \hline
 			System operacyjny		&Windows Subsystem for Linux, Ubuntu 20.04\\
@@ -70,54 +70,54 @@ W każdej generacji komórki:\\
 \hline
 			Kompilator			&gcc 9.3.0\\
 \end{tabularx}
-\newpage
 
 % trzecia sekcja
-\section{Diagram Modułów}\label{sec:teskt}
+\section{Diagram modułów}\label{sec:teskt}
 Program składa się z dwóch modułów - tgol\_file oraz tgol\_evo.
 Każdy z modułów składa się z dwóch plików - nagłówkowego oraz pliku źródłowego C.
 Poza tym program zawiera plik tgol\_main.c, zawierający funkcję main całego programu.
 \begin{figure}[htbp]
 \centerline{\includegraphics{diagram_modułów.png}}
 \label{fig}
-\end{figure}
 
+\end{figure}
+\newpage
 
 % czwarta sekcja
-\section{Opis Modułów i Funkcji}\label{sec:teskt}
+\section{Opis modułów i funkcji}\label{sec:teskt}
 Moduł tgol\_file zawiera funkcje odpowiadające za obsługę plików w obrębie programu - wczytywanie, przetwarzanie danych oraz tworzenie nowych plików przez program.
 Moduł tgol\_evo zawiera funkcje odpowiadające za ewolucję komórek na planszy.
 Moduły tgol\_file oraz tgol\_evo są od siebie niezależne (nie korzystają nawzajem ze swoich funkcji i nie przekazują bezpośrednio między sobą danych), plik tgol\_main.c jest zależny od obydwu modułów.
 
 
 % piąta sekcja
-\section{Struktura Danych}\label{sec:teskt}
-Przeprowadzenie wszystkich generacji dla planszy wymaga przeanalizowania conajmniej N x M x L pól, gdzie:
-	N-ilość wierszy planszy
- 	M-ilość kolumn planszy
-	L-ilość generacji
+\section{Struktura danych}\label{sec:teskt}
+Przeprowadzenie wszystkich generacji dla planszy wymaga przeanalizowania conajmniej\\ N x M x L pól, gdzie:\\
+	N-ilość wierszy planszy\\
+ 	M-ilość kolumn planszy\\
+	L-ilość generacji\\
 Dodatkowo znaczna większość komórek na planszy zawsze pozostoje martwa, więc na obliczenia wpływ miałby tylko ułamek ze wszystkich przechowywanych informacji o 
 polach. Z tych powodów omawiane oprogramowanie zakłada użycie specjalnego formatu reprezentacji macierzy rzadkiej jaką jest CRS (z ang. compressed row storage), która
 przechowuje wyłącznie informacje o niezerwowych elementach analizowanej planszy.
 Zasada działania CRS:
 Macierz rzadka wymiarów n x m jest reprezentowana przez dwa osobne jednowymiarowe wektory: col\_index, row\_index. Pierwszy z nich (col\_index) jest numerowany od 0 (pierwsza kolumna to kolumna 0) i odpowiada za przechowywanie w kolejności indeksów kolumn,
 w których znajdują się niezerwowe wartości. Drugi (row\_index) - zawsze rozpoczyna się od 0 i jego wartościami są ilości niezerwowych elementów, które wystąpiły w  kolejnych wierszach.
-\subsection{Przykład}
-1 0 0 0
-0 1 0 0
-0 0 1 0
-1 1 0 0
-col\_index: [0 1 2 0 1]
+\subsubsection{Przykład}
+1 0 0 0\\
+0 1 0 0\\
+0 0 1 0\\
+1 1 0 0\\
+col\_index: [0 1 2 0 1]\\
 row\_index: [0 1 2 3 5]
 
 % szósta sekcja
-\section{Sposób Wprowadzania Zmian i Przeprowadzania Testów}\label{sec:teskt}
+\section{Sposób wprowadzania zmian i przeprowadzania testów}\label{sec:teskt}
 Do wprowadzania zmian w projekcie używany jest system kontroli wersji git.
 Program obsługuje wiele rodzajów błędów - testy zostaną przeprowadzone poprzez uruchomienie programu z odpowiednio spreparowanymi, niepoprawnymi argumentami wywołania i formatowaniem pliku wejściowego, tak aby otrzymać każdy z komunikatów błędów z osobna.
 Z wyników testów będą tworzone zwięzłe raporty w postaci plików .txt i będą udostępniane całemu zespołowi za pośrednictwem gita.
 
 % siódma sekcja
-\section {Rozwiązanie Problemu Granicy Planszy}\label{sec:teskt}
+\section {Rozwiązanie problemu granicy planszy}\label{sec:teskt}
 Plansza będzie przechowywana w postaci informacji o macierzy, po której komórkach będzie iterować główna pętla programu.
 Jeżeli komórka znajduje się na skraju macierzy, to co najmniej jedna z jej współrzędnych jest skrajna, tj. równa 0 lub o 1 mniejsza od szerokości (w przypadku współrzędnej x) lub wysokości (w przypadku współrzędnej y) macierzy.
 Aby przy sprawdzaniu sąsiadów dookoła poszczególnych komórek uniknąć przekroczenia dozwolonego zakresu operatorami pętli, zakresy sprawdzania sąsiedztwa zostaną odpowiednio ograniczone dla skrajnych komórek.
