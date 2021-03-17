@@ -1,6 +1,10 @@
 #ifndef _TGOLFILE
 #define _TGOLFILE
 
+#define DEFAULT_ARGC 3
+
+const char* knownFlags[4] = {"-sbs", "-save", "-overwrite", "-refresh"};
+
 typedef enum {
     INCORRECT_NUMBER_OF_ARGS = 1,
     UNKNOWN_FLAG,
