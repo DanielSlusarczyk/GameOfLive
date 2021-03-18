@@ -6,7 +6,8 @@
 
 bool contains(const char** array, char* s) {
     bool ret = false;
-    for(int i = 0; i < (int)sizeof(array)/sizeof(char*); i++) {
+    int lim = sizeof(knownFlags)/sizeof(const char*);
+    for(int i = 0; i < lim; i++) {
         if(strcmp(array[i], s) == 0)
             ret = true;
     }
@@ -15,7 +16,11 @@ bool contains(const char** array, char* s) {
 
 int main(int argc, char** argv) {
 
-    //najpierw sprawdzam obowiazkowe argumenty, w kolejnosci ich wystepowania
+    if(argc < DEFAULT_ARGC) {
+        printf("INCORRECT_NUMBER_OF_ARGS\n");
+        return INCORRECT_NUMBER_OF_ARGS;
+    }
+    //sprawdzam obowiazkowe argumenty, w kolejnosci ich wystepowania
     FILE* inFile = fopen(argv[1], "r");
     if(inFile == NULL) {
         printf("INPUT_ERR\n");
@@ -25,45 +30,50 @@ int main(int argc, char** argv) {
         printf("INCORRECT_GENS\n");
         return INCORRECT_GENS;
     }
-    //jezeli mamy wiecej niz 2 argumenty (nie liczac exe/out), uznajemy ze pojawila sie flaga
-    bool flagsPresent = argc > DEFAULT_ARGC;
 
-    //sprawdzamy czy jako 3 argument faktycznie jest flaga, czy jaka glupota
-    if(flagsPresent && argv[DEFAULT_ARGC][0] != '-') {
-        printf("INCORRECT_NUMBER_OF_ARGS\n");
-        return INCORRECT_NUMBER_OF_ARGS;
-    }
-    if(flagsPresent) {
-        bool saveOverwrite = false;
-        for(int i = 1; i < argc; i++) {
-            if(!contains(knownFlags, argv[i])) {
-                /*
-                jezeli obecnego argv nie ma na liscie znanych flag, to sprawdzamy czy rozpatrywac
-                je jako sciezke do wyjscia, czy jako nieznana flage
-                */
-                if(strcmp(argv[i-1], "-save") == 0) {
-                    FILE* outFile = fopen(argv[i], "w");
+    int n = DEFAULT_ARGC;
+    bool spotkany = false;
+    while(n < argc) {
+        if(argv[n][0] != '-') {
+            printf("UNKNOWN_FLAG\n");
+            return UNKNOWN_FLAG;
+        }
+        else {
+            if(!contains(knownFlags, argv[n])) {
+                printf("UNKNOWN_FLAG\n");
+                return UNKNOWN_FLAG;
+            }
+            else if(strcmp(argv[n], "-save") == 0) {
+                if(!spotkany)
+                    spotkany = true;
+                else {
+                    printf("AMBIGUOUS_OUT\n");
+                    return AMBIGUOUS_OUT;
+                }
+                if(argv[n+1][0] != '-') {
+                    FILE* outFile = fopen(argv[n+1], "w");
                     if(outFile == NULL) {
                         printf("NO_OUT\n");
                         return NO_OUT;
                     }
+                    n++;
                 }
                 else {
-                    printf("UNKNOWN_FLAG\n");
-                    return UNKNOWN_FLAG;
+                    printf("NO_OUT\n");
+                    return NO_OUT;
                 }
             }
-            //jezeli flaga istnieje, sprawdzamy czy nie napotkano "-save" lub "-overwrite"
-            else if(strcmp(argv[i], "-save") == 0 || strcmp(argv[i], "-overwrite") == 0) {
-                //jezeli to pierwsze napotkanie jednego lub drugiego, odhaczam ze napotkalem
-                if(!saveOverwrite) saveOverwrite = true;
-                //jezeli to nie pierwsze, to mam konflikt, wystepuje blad
+            else if(strcmp(argv[n], "-overwrite") == 0) {
+                if(!spotkany)
+                    spotkany = true;
                 else {
                     printf("AMBIGUOUS_OUT\n");
                     return AMBIGUOUS_OUT;
                 }
             }
         }
-    }   
+        n++;
+    }
+    
     return 0;
 }

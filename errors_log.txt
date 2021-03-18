@@ -5,11 +5,11 @@ brak znaków - nie napisano obsługi błędu
 // - nieprzetestowana obsługa błędu
 
 ##INCORRECT_NUMBER_OF_ARGS  niepoprawna ilosc
-!!UNKNOWN_FLAG              nieznana flaga
+##UNKNOWN_FLAG              nieznana flaga
 ##INPUT_ERR                 nie mozna otworzyc wejscia
 ##INCORRECT_GENS            niepoprawna dana
 INPUT_NOT_INT               nie-inty w wejsciu
 INPUT_SHORT                 za malo wspolrzednych w wejsciu
 INPUT_XY                    nieodpowiednie wymiary planszy w wejsciu
-//AMBIGUOUS_OUT             uzyto kombinacji "-save" z "-overwrite"
-//NO_OUT                    uzyto "-save" i nie podano wyjscia lub nie mozna otworzyc podanego wyjscia
+##AMBIGUOUS_OUT             uzyto kombinacji "-save" z "-overwrite"
+##NO_OUT                    uzyto "-save" i nie podano wyjscia lub nie mozna otworzyc podanego wyjscia
