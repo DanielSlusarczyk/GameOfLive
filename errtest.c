@@ -43,13 +43,13 @@ int main(int argc, char** argv) {
                 printf("UNKNOWN_FLAG\n");
                 return UNKNOWN_FLAG;
             }
+            else if(strcmp(argv[n], "-sbs") == 0) sbs = true;
             else if(strcmp(argv[n], "-save") == 0) {
-                if(!spotkany)
-                    spotkany = true;
-                else {
+                if(overwrite) {
                     printf("AMBIGUOUS_OUT\n");
                     return AMBIGUOUS_OUT;
                 }
+                save = true;
                 if(argv[n+1][0] != '-') {
                     FILE* outFile = fopen(argv[n+1], "w");
                     if(outFile == NULL) {
@@ -64,13 +64,13 @@ int main(int argc, char** argv) {
                 }
             }
             else if(strcmp(argv[n], "-overwrite") == 0) {
-                if(!spotkany)
-                    spotkany = true;
-                else {
+                if(save) {
                     printf("AMBIGUOUS_OUT\n");
                     return AMBIGUOUS_OUT;
                 }
+                overwrite = true;
             }
+            else if(strcmp(argv[n], "-refresh") == 0) refresh = true;
         }
         n++;
     }

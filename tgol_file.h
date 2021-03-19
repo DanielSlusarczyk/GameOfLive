@@ -3,6 +3,10 @@
 
 #define DEFAULT_ARGC 3
 
+bool sbs = false;
+bool save = false;
+bool overwrite = false;
+bool refresh = false;
 const char* knownFlags[4] = {"-sbs", "-save", "-overwrite", "-refresh"};
 
 typedef enum {
