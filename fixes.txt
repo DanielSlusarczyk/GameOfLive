@@ -1,0 +1,17 @@
+PLIK ZE WSZYSTKIMI ZMIANAMI W SPECYFIKACJACH
+
+SPECYFIKACJA FUNKCJONALNA:
+1) Zmiana formatu pliku wejściowego
+Linia 1: <liczba wierszy> x <liczba kolumn>
+Linia 2: <współrzędna x1 punktu> <współrzędna y1 punktu>
+Linia 3: <współrzędna x2 punktu> <współrzędna y2 punktu>
+...
+Linia n: <współrzędna xn punktu> <współrzędna yn punktu>
+Przykład: Dla planszy 2x3 z punktami po rogach 
+1 0 0
+0 0 1
+Plik wejściowy:
+2 x 3
+1 2
+3 1
+Uwaga: Ważna kolejność
