@@ -1,0 +1,17 @@
+Przykładowe poprawne uruchomienia:
+    ./errtest input1.txt 3
+    ./errtest input1.txt 3 -sbs
+    ./errtest input1.txt 3 -save output1.txt
+    ./errtest input1.txt 3 -overwrite -refresh
+    ./errtest input1.txt 3 -sbs -save output1.txt
+
+Przykładowe uruchomienia wywołujące kody błędów:
+1. INCORRECT_NUMBER_OF_ARGS:    ./errtest
+2. UNKNOWN_FLAG:                ./errtest input1.txt 3 -flag_xyz
+3. INPUT_ERR:                   ./errtest fhsduyfg 3
+4. INCORRECT_GENS:              ./errtest input1.txt sdhfvsu
+5. INPUT_NOT_INT:
+6. INPUT_SHORT:
+7. INPUT_XY:
+8. AMBIGUOUS_OUT:               ./errtest input1.txt 3 -save output1.txt -overwrite
+9. NO_OUT:                      ./errtest input1.txt 3 -save -refresh -sbs
