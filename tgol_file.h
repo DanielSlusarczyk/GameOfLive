@@ -3,6 +3,10 @@
 
 #define DEFAULT_ARGC 3
 
+#include <stdbool.h>
+
+FILE* inFile;
+FILE* outFile;
 bool sbs = false;
 bool save = false;
 bool overwrite = false;
@@ -22,6 +26,7 @@ typedef enum {
     NO_OUT
 } ErrorCode;
 
+bool contains(const char**, char*);
 ErrorCode argvErr(int, char**);
 
 #endif
