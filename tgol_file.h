@@ -1,6 +1,7 @@
 #ifndef _TGOLFILE
 #define _TGOLFILE
 
+#define DEBUG 1
 #define DEFAULT_ARGC 3
 
 #include <stdbool.h>
@@ -26,7 +27,23 @@ typedef enum {
     NO_OUT
 } ErrorCode;
 
+typedef struct data {
+    //Wymiar x planszy
+    int x;
+    //Wymiar y planszy
+    int y;
+    //Wektor z numerami kolumn
+    int* col_index;
+    //Wektor z ilościa niezerowych elementów w wierszu
+    int* row_index;
+    //Długośc wektora col_index
+    int col_length;
+    //Długość wektora row_index
+    int row_length;
+} data, * t_data;
+
+
 bool contains(const char**, char*);
-ErrorCode argvErr(int, char**);
+ErrorCode read_file(FILE* in, t_data matrix);
 
 #endif
