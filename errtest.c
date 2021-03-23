@@ -5,24 +5,36 @@
 #include "tgol_file.h"
 
 int main(int argc, char** argv) {
-    if(argc < DEFAULT_ARGC) return INCORRECT_NUMBER_OF_ARGS;
-    //sprawdzam obowiazkowe argumenty, w kolejnosci ich wystepowania
-    inFile = fopen(argv[1], "r");
-    if(inFile == NULL) return INPUT_ERR;
-    if(atoi(argv[2]) <= 0) return INCORRECT_GENS;
+    FILE* inFile = fopen(argv[1], "r");
+    FILE* outFile = NULL;
+    bool sbs = false;
+    bool save = false;
+    bool overwrite = false;
+    bool refresh = false;
+
+    if(argc < DEFAULT_ARGC)
+        return INCORRECT_NUMBER_OF_ARGS;
+    if(inFile == NULL)
+        return FILE_OPEN_ERR;
+    if(atoi(argv[2]) <= 0)  
+        return INCORRECT_GENS;
 
     int n = DEFAULT_ARGC;
     while(n < argc) {
-        if(argv[n][0] != '-') return UNKNOWN_FLAG;
+        if(argv[n][0] != '-')
+            return UNKNOWN_FLAG;
         else {
-            if(!contains(knownFlags, argv[n])) return UNKNOWN_FLAG;
+            if(!contains(knownFlags, argv[n]))
+                return UNKNOWN_FLAG;
             else if(strcmp(argv[n], "-sbs") == 0) sbs = true;
             else if(strcmp(argv[n], "-save") == 0) {
-                if(overwrite) return AMBIGUOUS_OUT;
+                if(overwrite)
+                    return AMBIGUOUS_OUT;
                 save = true;
                 if(argv[n+1][0] != '-') {
                     outFile = fopen(argv[n+1], "w");
-                    if(outFile == NULL) return NO_OUT;
+                    if(outFile == NULL)
+                        return NO_OUT;
                     n++;
                 }
                 else return NO_OUT;
@@ -38,20 +50,27 @@ int main(int argc, char** argv) {
 
     data mat;
     ErrorCode errCode = read_file(inFile, &mat);
-    if(errCode != 0) return errCode;
-    if (DEBUG == 1) {
+    if(errCode != 0)
+        return errCode;
+    if(DEBUG) {
         printf("Wymiary: %d x %d\n", mat.x, mat.y);
         printf("Col_index [ ");
-        for (int i = 0; i < mat.col_length; i++)
+        for(int i = 0; i < mat.col_length; i++)
             printf("%d ", mat.col_index[i]);
         printf("]\n");
         printf("Row_index [ ");
-        for (int i = 0; i <= mat.row_length; i++)
+        for(int i = 0; i <= mat.row_length; i++)
             printf("%d ", mat.row_index[i]);
         printf("]\n");
     }
+    
+    if(overwrite) {
+        fclose(inFile);
+        inFile = fopen(argv[1], "w");
+    }
     return 0;
 }
+
 
 bool contains(const char** array, char* s) {
     bool ret = false;
@@ -63,6 +82,7 @@ bool contains(const char** array, char* s) {
     return ret;
 }
 
+
 ErrorCode read_file(FILE* in, t_data mat) {
     int xtemp, ytemp;
     char tmp[5];
@@ -70,8 +90,11 @@ ErrorCode read_file(FILE* in, t_data mat) {
     mat->col_length = 0;
     mat->col_index = NULL;
     //Czytanie pierwszej linii
-    if (fscanf(in, "%d %s %d", &ytemp, tmp, &xtemp) != 3)
-        return INPUT_XY;
+    if(fscanf(in, "%d %s %d", &ytemp, tmp, &xtemp) != 3)
+        return INPUT_DIMS;
+
+    int read_row = ytemp;
+    int read_col = 0;
 
     //Inicjalizowanie struktury
     mat->x = xtemp;
@@ -83,25 +106,30 @@ ErrorCode read_file(FILE* in, t_data mat) {
 
     //Czytanie reszty linii
     int amount;
-    while ((amount = fscanf(in, "%d %d", &xtemp, &ytemp)) != EOF) {
-        if (amount == 2) {
-            if (xtemp > mat->x || ytemp > mat->y || xtemp < 1 || ytemp < 1)
-                return INPUT_XY;
+    while((amount = fscanf(in, "%d %d", &xtemp, &ytemp)) != EOF) {
+        if(amount == 2) {
+            if(xtemp > mat->x || ytemp > mat->y || xtemp < 1 || ytemp < 1)
+                return INPUT_LIMIT_XY;
+            if(read_row < ytemp)
+                return INPUT_INCORRECT_ORDER;
+            if(read_col >= xtemp && read_row <= ytemp)
+                return INPUT_INCORRECT_ORDER;
             mat->col_length++;
             mat->col_index = (int*)realloc(mat->col_index, mat->col_length *sizeof(int));
             mat->col_index[mat->col_length - 1] = xtemp - 1;
             numPerLine[mat->y - ytemp]++;
         }
         else
-            return INPUT_NOT_INT;
+            return INPUT_INCORRECT;
 
+        read_row = ytemp;
+        read_col = xtemp;
     }
+
     int sum = 0;
-    for (int i = 1; i <= mat->y; i++) {
+    for(int i = 1; i <= mat->y; i++) {
         sum += numPerLine[i - 1];
         mat->row_index[i] = sum;
     }
-    if (mat->col_length == 0)
-        return INPUT_SHORT;
     return 0;
 }

@@ -8,10 +8,11 @@ Przykładowe poprawne uruchomienia:
 Przykładowe uruchomienia wywołujące kody błędów:
 1. INCORRECT_NUMBER_OF_ARGS:    ./errtest
 2. UNKNOWN_FLAG:                ./errtest input1.txt 3 -flag_xyz
-3. INPUT_ERR:                   ./errtest fhsduyfg 3
+3. FILE_OPEN_ERR:               ./errtest fhsduyfg 3
 4. INCORRECT_GENS:              ./errtest input1.txt sdhfvsu
-5. INPUT_NOT_INT:
-6. INPUT_SHORT:
-7. INPUT_XY:
-8. AMBIGUOUS_OUT:               ./errtest input1.txt 3 -save output1.txt -overwrite
-9. NO_OUT:                      ./errtest input1.txt 3 -save -refresh -sbs
+5. INPUT_LIMIT_XY:              niezależny od argv
+6. INPUT_DIMS:                  niezależny od argv
+7. INPUT_INCORRECT:             niezależny od argv
+8. INPUT_INCORRECT_ORDER:       niezależny od argv
+9. AMBIGUOUS_OUT:               ./errtest input1.txt 3 -overwrite -save output1.txt
+10. NO_OUT:                     ./errtest input1.txt 3 -save -refresh -sbs
