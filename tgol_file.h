@@ -8,6 +8,18 @@
 #include <stdbool.h>
 
 const char* knownFlags[4] = {"-sbs", "-save", "-overwrite", "-refresh"};
+const char* Errors[10] = {
+    "INCORRECT_NUMBER_OF_ARGS",
+    "UNKNOWN_FLAG",
+    "FILE_OPEN_ERR",
+    "INCORRECT_GENS",
+    "INPUT_LIMIT_XY",
+    "INPUT_DIMS",
+    "INPUT_INCORRECT",
+    "INPUT_INCORRECT_ORDER",
+    "AMBIGUOUS_OUT",
+    "NO_OUT"
+};
 
 typedef enum {
     INCORRECT_NUMBER_OF_ARGS = 1,

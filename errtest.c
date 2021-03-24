@@ -12,48 +12,72 @@ int main(int argc, char** argv) {
     bool overwrite = false;
     bool refresh = false;
 
-    if(argc < DEFAULT_ARGC)
+    if(argc < DEFAULT_ARGC) {
+        printf("%s\n", Errors[INCORRECT_NUMBER_OF_ARGS-1]);
         return INCORRECT_NUMBER_OF_ARGS;
-    if(inFile == NULL)
+    }   
+    if(inFile == NULL) {
+        printf("%s\n", Errors[FILE_OPEN_ERR-1]);
         return FILE_OPEN_ERR;
-    if(atoi(argv[2]) <= 0)  
+    }
+        
+    if(atoi(argv[2]) <= 0) {
+        printf("%s\n", Errors[INCORRECT_GENS-1]);
         return INCORRECT_GENS;
+    }    
 
     int n = DEFAULT_ARGC;
     while(n < argc) {
-        if(argv[n][0] != '-')
+        if(argv[n][0] != '-') {
+            printf("%s\n", Errors[UNKNOWN_FLAG-1]);
             return UNKNOWN_FLAG;
+        }
         else {
-            if(!contains(knownFlags, argv[n]))
+            if(!contains(knownFlags, argv[n])) {
+                printf("%s\n", Errors[UNKNOWN_FLAG-1]);
                 return UNKNOWN_FLAG;
+            }
             else if(strcmp(argv[n], "-sbs") == 0) sbs = true;
             else if(strcmp(argv[n], "-save") == 0) {
-                if(overwrite)
+                if(overwrite) {
+                    printf("%s\n", Errors[AMBIGUOUS_OUT-1]);
                     return AMBIGUOUS_OUT;
+                }
                 save = true;
                 if(argv[n+1][0] != '-') {
                     outFile = fopen(argv[n+1], "w");
-                    if(outFile == NULL)
+                    if(outFile == NULL) {
+                        printf("%s\n", Errors[NO_OUT-1]);
                         return NO_OUT;
+                    }
                     n++;
                 }
-                else return NO_OUT;
+                else {
+                    printf("%s\n", Errors[NO_OUT-1]);
+                    return NO_OUT;
+                }
             }
             else if(strcmp(argv[n], "-overwrite") == 0) {
-                if(save) return AMBIGUOUS_OUT;
+                if(save) {
+                    printf("%s\n", Errors[AMBIGUOUS_OUT-1]);
+                    return AMBIGUOUS_OUT;
+                }
                 overwrite = true;
             }
-            else if(strcmp(argv[n], "-refresh") == 0) refresh = true;
+            else if(strcmp(argv[n], "-refresh") == 0)
+                refresh = true;
         }
         n++;
     }
 
     data mat;
     ErrorCode errCode = read_file(inFile, &mat);
-    if(errCode != 0)
+    if(errCode != 0) {
+        printf("%s\n", Errors[errCode-1]);
         return errCode;
+    }
     if(DEBUG) {
-        printf("Wymiary: %d x %d\n", mat.x, mat.y);
+        printf("Wymiary: %d x %d\n", mat.y, mat.x);
         printf("Col_index [ ");
         for(int i = 0; i < mat.col_length; i++)
             printf("%d ", mat.col_index[i]);
