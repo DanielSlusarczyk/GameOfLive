@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include "tgol_file.h"
+#include "tgol_evo.h"
 
 int main(int argc, char** argv) {
     FILE* inFile = fopen(argv[1], "r");
@@ -96,16 +97,7 @@ int main(int argc, char** argv) {
     if(save) {
         fprintf(outFile, "%s", "udało się zapisać do pliku\n");
     }
+
+    print_mat(mat);
     return 0;
-}
-
-
-bool contains(const char** array, char* s) {
-    bool ret = false;
-    int lim = sizeof(knownFlags)/sizeof(const char*);
-    for(int i = 0; i < lim; i++) {
-        if(strcmp(array[i], s) == 0)
-            ret = true;
-    }
-    return ret;
 }

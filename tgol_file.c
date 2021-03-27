@@ -18,6 +18,16 @@ const char* Errors[10] = {
     "NO_OUT"
 };
 
+bool contains(const char** array, char* s) {
+    bool ret = false;
+    int lim = sizeof(knownFlags)/sizeof(const char*);
+    for(int i = 0; i < lim; i++) {
+        if(strcmp(array[i], s) == 0)
+            ret = true;
+    }
+    return ret;
+}
+
 ErrorCode read_file(FILE* in, t_data mat) {
     int xtemp, ytemp;
     char tmp[5];
@@ -34,8 +44,7 @@ ErrorCode read_file(FILE* in, t_data mat) {
     //Inicjalizowanie struktury
     mat->x = xtemp;
     mat->y = ytemp;
-    mat->row_index = (int*)malloc((mat->y+1) * sizeof(int));
-    mat->row_index[0] = 0;
+    mat->row_index = (int*)calloc((mat->y+1), sizeof(int));
     mat->row_length = mat->y;
     int* numPerLine = (int*)calloc(ytemp, sizeof(int));
 
@@ -50,7 +59,7 @@ ErrorCode read_file(FILE* in, t_data mat) {
             if(read_col >= xtemp && read_row <= ytemp)
                 return INPUT_INCORRECT_ORDER;
             mat->col_length++;
-            mat->col_index = (int*)realloc(mat->col_index, mat->col_length *sizeof(int));
+            mat->col_index = (int*)realloc(mat->col_index, mat->col_length * sizeof(int));
             mat->col_index[mat->col_length - 1] = xtemp - 1;
             numPerLine[mat->y - ytemp]++;
         }
