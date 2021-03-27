@@ -7,19 +7,8 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-const char* knownFlags[4] = {"-sbs", "-save", "-overwrite", "-refresh"};
-const char* Errors[10] = {
-    "INCORRECT_NUMBER_OF_ARGS",
-    "UNKNOWN_FLAG",
-    "FILE_OPEN_ERR",
-    "INCORRECT_GENS",
-    "INPUT_LIMIT_XY",
-    "INPUT_DIMS",
-    "INPUT_INCORRECT",
-    "INPUT_INCORRECT_ORDER",
-    "AMBIGUOUS_OUT",
-    "NO_OUT"
-};
+extern const char* knownFlags[4];
+extern const char* Errors[10];
 
 typedef enum {
     INCORRECT_NUMBER_OF_ARGS = 1,
@@ -34,23 +23,17 @@ typedef enum {
     NO_OUT
 } ErrorCode;
 
-typedef struct data {
-    //Wymiar x planszy
+typedef struct {
     int x;
-    //Wymiar y planszy
     int y;
-    //Wektor z numerami kolumn
     int* col_index;
-    //Wektor z ilościa niezerowych elementów w wierszu
     int* row_index;
-    //Długośc wektora col_index
     int col_length;
-    //Długość wektora row_index
     int row_length;
 } data, * t_data;
 
 
 bool contains(const char**, char*);
-ErrorCode read_file(FILE* in, t_data matrix);
+ErrorCode read_file(FILE*, t_data);
 
 #endif

@@ -90,7 +90,11 @@ int main(int argc, char** argv) {
     
     if(overwrite) {
         fclose(inFile);
-        inFile = fopen(argv[1], "w");
+        outFile = fopen(argv[1], "w");
+        fprintf(outFile, "%s", "udało się nadpisać plik\n");
+    }
+    if(save) {
+        fprintf(outFile, "%s", "udało się zapisać do pliku\n");
     }
     return 0;
 }
@@ -104,56 +108,4 @@ bool contains(const char** array, char* s) {
             ret = true;
     }
     return ret;
-}
-
-
-ErrorCode read_file(FILE* in, t_data mat) {
-    int xtemp, ytemp;
-    char tmp[5];
-    mat->row_length = 0;
-    mat->col_length = 0;
-    mat->col_index = NULL;
-    //Czytanie pierwszej linii
-    if(fscanf(in, "%d %s %d", &ytemp, tmp, &xtemp) != 3)
-        return INPUT_DIMS;
-
-    int read_row = ytemp;
-    int read_col = 0;
-
-    //Inicjalizowanie struktury
-    mat->x = xtemp;
-    mat->y = ytemp;
-    mat->row_index = (int*)malloc((mat->y+1) * sizeof(int));
-    mat->row_index[0] = 0;
-    mat->row_length = mat->y;
-    int* numPerLine = (int*)calloc(ytemp, sizeof(int));
-
-    //Czytanie reszty linii
-    int amount;
-    while((amount = fscanf(in, "%d %d", &xtemp, &ytemp)) != EOF) {
-        if(amount == 2) {
-            if(xtemp > mat->x || ytemp > mat->y || xtemp < 1 || ytemp < 1)
-                return INPUT_LIMIT_XY;
-            if(read_row < ytemp)
-                return INPUT_INCORRECT_ORDER;
-            if(read_col >= xtemp && read_row <= ytemp)
-                return INPUT_INCORRECT_ORDER;
-            mat->col_length++;
-            mat->col_index = (int*)realloc(mat->col_index, mat->col_length *sizeof(int));
-            mat->col_index[mat->col_length - 1] = xtemp - 1;
-            numPerLine[mat->y - ytemp]++;
-        }
-        else
-            return INPUT_INCORRECT;
-
-        read_row = ytemp;
-        read_col = xtemp;
-    }
-
-    int sum = 0;
-    for(int i = 1; i <= mat->y; i++) {
-        sum += numPerLine[i - 1];
-        mat->row_index[i] = sum;
-    }
-    return 0;
 }
