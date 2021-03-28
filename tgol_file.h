@@ -20,7 +20,8 @@ typedef enum {
     INPUT_INCORRECT,
     INPUT_INCORRECT_ORDER,
     AMBIGUOUS_OUT,
-    NO_OUT
+    NO_OUT,
+    COR
 } ErrorCode;
 
 typedef struct {
@@ -32,8 +33,17 @@ typedef struct {
     int row_length;
 } data, * t_data;
 
+typedef struct field {
+    int x;
+    int y;
+    int neighbors;
+    bool previous_alive;
+    field* next;
+}field, * t_field;
 
 bool contains(const char**, char*);
 ErrorCode read_file(FILE*, t_data);
+void write_generation(t_data);
+t_data new_generation(t_data);
 
 #endif
