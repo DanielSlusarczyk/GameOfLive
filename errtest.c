@@ -78,15 +78,19 @@ int main(int argc, char** argv) {
         return errCode;
     }
     if(DEBUG) {
-        printf("Wymiary: %d x %d\n", mat.y, mat.x);
-        printf("Col_index [ ");
+        printf("loaded a %dx%d sparse matrix from %s\n", mat.y, mat.x, argv[1]);
+        printf("col_index = [ ");
         for(int i = 0; i < mat.col_length; i++)
             printf("%d ", mat.col_index[i]);
         printf("]\n");
-        printf("Row_index [ ");
+        printf("row_index = [ ");
         for(int i = 0; i <= mat.row_length; i++)
             printf("%d ", mat.row_index[i]);
         printf("]\n");
+
+        print_mat(mat);
+        mooreNextGen(mat);
+        //check_alive(mat);
     }
     
     if(overwrite) {
@@ -97,7 +101,5 @@ int main(int argc, char** argv) {
     if(save) {
         fprintf(outFile, "%s", "udało się zapisać do pliku\n");
     }
-
-    print_mat(mat);
     return 0;
 }

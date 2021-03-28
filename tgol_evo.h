@@ -5,8 +5,8 @@
 extern char dead, alive;
 
 void print_mat(data);
-int moore_neighb(data, int, int);
-int neumann_neighb(data, int, int);
-void evolve(data*, int);
+bool isAlive(data, int, int);
+void printMooreNextGen(data);
+void printNeumannNextGen(data);
 
 #endif
