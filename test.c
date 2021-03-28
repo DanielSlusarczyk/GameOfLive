@@ -108,7 +108,7 @@ int main(int argc, char** argv) {
         matrix = new_generation(matrix);
         print_generation(matrix);
         if(!DEBUG) {
-            system("sleep 0.05");
+            system("sleep 0.08");
             system("clear");
         }
         if(DEBUG) {
