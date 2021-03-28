@@ -9,6 +9,7 @@
 char dead = '.';
 char alive = 'O';
 
+<<<<<<< HEAD
 void print_generation(t_data mat) {
         int ite_col = 0;
         for(int i = 0; i < mat->y; i++) {
@@ -25,8 +26,7 @@ void print_generation(t_data mat) {
                     printf("%c ", dead);
             }
             printf("\n");
-        }
-        printf("\n");
+	}
 }
 
 t_field add_coordinates(t_data m, t_field lista, int a, int b, bool al) {
