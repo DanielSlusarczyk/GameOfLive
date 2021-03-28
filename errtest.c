@@ -89,7 +89,7 @@ int main(int argc, char** argv) {
         printf("]\n");
 
         print_mat(mat);
-        mooreNextGen(mat);
+        //mooreNextGen(mat);
         //check_alive(mat);
     }
     
