@@ -18,6 +18,16 @@ const char* Errors[10] = {
     "NO_OUT"
 };
 
+bool contains(const char** array, char* s) {
+    bool ret = false;
+    int lim = sizeof(knownFlags) / sizeof(const char*);
+    for(int i = 0; i < lim; i++) {
+        if(strcmp(array[i], s) == 0)
+            ret = true;
+    }
+    return ret;
+}
+
 ErrorCode read_file(FILE* in, t_data mat) {
     int xtemp, ytemp;
     char tmp[5];

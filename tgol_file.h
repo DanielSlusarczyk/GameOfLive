@@ -1,7 +1,7 @@
 #ifndef _TGOLFILE
 #define _TGOLFILE
 
-#define DEBUG 1
+#define DEBUG false
 #define DEFAULT_ARGC 3
 
 #include <stdio.h>
@@ -31,15 +31,7 @@ typedef struct {
     int* row_index;
     int col_length;
     int row_length;
-} data, * t_data;
-
-typedef struct field {
-    int x;
-    int y;
-    int neighbors;
-    bool previous_alive;
-    field* next;
-}field, * t_field;
+} data, *t_data;
 
 bool contains(const char**, char*);
 ErrorCode read_file(FILE*, t_data);
