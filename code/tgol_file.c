@@ -28,7 +28,7 @@ bool contains(const char** array, char* s) {
     return ret;
 }
 
-ErrorCode readFile(FILE* in, t_data mat) {
+ErrorCode readFile(FILE* in, t_crs mat) {
     int xtemp, ytemp;
     char tmp[5];
     mat->colLength = 0;
@@ -83,7 +83,7 @@ ErrorCode readFile(FILE* in, t_data mat) {
     return COR;
 }
 
-void writeFile(FILE* out, t_data mat) {
+void writeFile(FILE* out, t_crs mat) {
     fprintf(out, "%d x %d\n", mat->y, mat->x);
     int colIterator = 0;
     for(int i = 1; i < mat->rowLength; i++) {
@@ -96,7 +96,7 @@ void writeFile(FILE* out, t_data mat) {
     fclose(out);
 }
 
-void freeCRS(data mat) {
+void freeCRS(crs mat) {
     free(mat.rowIndex);
     free(mat.colIndex);
 }
