@@ -27,15 +27,13 @@ typedef enum {
 typedef struct {
     int x;
     int y;
-    int* col_index;
-    int* row_index;
-    int col_length;
-    int row_length;
+    int* colIndex;
+    int* rowIndex;
+    int colLength;
+    int rowLength;
 } data, *t_data;
 
 bool contains(const char**, char*);
-ErrorCode read_file(FILE*, t_data);
-void write_generation(t_data);
-t_data new_generation(t_data);
+ErrorCode readFile(FILE*, t_data);
 
 #endif

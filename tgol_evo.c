@@ -7,15 +7,14 @@
 #include "tgol_evo.h"
 
 char dead = '.';
-char alive = 'O';
+char alive = 'X';
 
-<<<<<<< HEAD
-void print_generation(t_data mat) {
+void printMat(t_data mat) {
         int ite_col = 0;
         for(int i = 0; i < mat->y; i++) {
             for(int j = 0; j < mat->x; j++) {
-                if(mat->col_index != NULL) {
-                    if(mat->col_index[ite_col] == j && mat->row_index[i + 1] > ite_col) {
+                if(mat->colIndex != NULL) {
+                    if(mat->colIndex[ite_col] == j && mat->rowIndex[i + 1] > ite_col) {
                         printf("%c ", alive);
                         ite_col++;
                     }
@@ -29,20 +28,20 @@ void print_generation(t_data mat) {
 	}
 }
 
-t_field add_coordinates(t_data m, t_field lista, int a, int b, bool al) {
+t_field addCoordinates(t_data m, t_field lista, int a, int b, bool al) {
     if(a >= 0 && a < m->x && b > 0 && b <= m->y) {
         if(lista == NULL ||(lista->x > a && lista->y <= b) ||(lista->y < b)) {
-            t_field n = (t_field)malloc(sizeof(field));
+            t_field n = calloc(1, sizeof(field));
             n->x = a;
             n->y = b;
-            n->previous_alive = al;
+            n->previousAlive = al;
             n->next = lista; 
             if(al == true) {
-                n->previous_alive = true;
+                n->previousAlive = true;
                 n->neighbors = 0;
             }
-            else if(n->previous_alive!=true) {
-                n->previous_alive = false;
+            else if(n->previousAlive!=true) {
+                n->previousAlive = false;
                 n->neighbors = 1;
             }
             return n;
@@ -50,12 +49,12 @@ t_field add_coordinates(t_data m, t_field lista, int a, int b, bool al) {
         else if(lista == NULL ||(lista->x == a && lista->y == b)) {
             if(al!=true)
                 lista->neighbors++;
-            if(lista->previous_alive != true) 
-                lista->previous_alive = al;
+            if(lista->previousAlive != true) 
+                lista->previousAlive = al;
             return lista;
         }
         else {
-            lista->next = add_coordinates(m, lista->next, a, b, al);
+            lista->next = addCoordinates(m, lista->next, a, b, al);
             return lista;
         }
 
@@ -64,56 +63,73 @@ t_field add_coordinates(t_data m, t_field lista, int a, int b, bool al) {
         return lista;
 }
 
-t_data new_generation(t_data mat) {
-    t_data new_mat = (t_data)malloc(sizeof(data));
-    new_mat->row_length = mat->y+1;
-    new_mat->col_length = 0;
-    new_mat->col_index = NULL;
-    new_mat->x = mat->x;
-    new_mat->y = mat->y;
-    new_mat->row_index = (int*)malloc((mat->y + 1) * sizeof(int));
-    new_mat->row_index[0] = 0;
+//tryby: 'm' - sąsiedztwo moore'a, 'n' - sąsiedztwo von
+t_data newGeneration(t_data mat, char mode) {
+    t_data newMat = calloc(1, sizeof(data));
+    newMat->rowLength = mat->y+1;
+    newMat->colLength = 0;
+    newMat->colIndex = NULL;
+    newMat->x = mat->x;
+    newMat->y = mat->y;
+    newMat->rowIndex = calloc(mat->y + 1, sizeof(int));
+    newMat->rowIndex[0] = 0;
 
     t_field data = NULL;
 
     for(int i = 0; i < mat->y; i++) {
-        for(int j = mat->row_index[i]; j < mat->row_index[i + 1]; j++) {
+        for(int j = mat->rowIndex[i]; j < mat->rowIndex[i+1]; j++) {
             //lewo
-            data = add_coordinates(mat, data, mat->col_index[j] -1, mat->y - i, false);
-            //lewo-góra(MOORE)
-            data = add_coordinates(mat, data, mat->col_index[j] - 1, mat->y - i + 1, false);
+            data = addCoordinates(mat, data, mat->colIndex[j] - 1, mat->y - i, false);
             //góra
-            data = add_coordinates(mat, data, mat->col_index[j], mat->y - i + 1, false);
-            //prawo-góra(MOORE)
-            data = add_coordinates(mat, data, mat->col_index[j] + 1, mat->y - i +1, false);
+            data = addCoordinates(mat, data, mat->colIndex[j], mat->y - i + 1, false);
             //prawo
-            data = add_coordinates(mat, data, mat->col_index[j] + 1, mat->y - i, false);
-            //prawo-dół(MOORE)
-            data = add_coordinates(mat, data, mat->col_index[j] + 1, mat->y - i - 1, false);
+            data = addCoordinates(mat, data, mat->colIndex[j] + 1, mat->y - i, false);
             //dół
-            data = add_coordinates(mat, data, mat->col_index[j], mat->y - i - 1, false);
-            //lewo-dół(MOORE)
-            data = add_coordinates(mat, data, mat->col_index[j] - 1, mat->y - i - 1, false);
+            data = addCoordinates(mat, data, mat->colIndex[j], mat->y - i - 1, false);
             //środek
-            data = add_coordinates(mat, data, mat->col_index[j], mat->y - i, true);
+            data = addCoordinates(mat, data, mat->colIndex[j], mat->y - i, true);
+            if(mode == 'm') {
+                //lewo-góra(MOORE)
+                data = addCoordinates(mat, data, mat->colIndex[j] - 1, mat->y - i + 1, false);
+                //prawo-góra(MOORE)
+                data = addCoordinates(mat, data, mat->colIndex[j] + 1, mat->y - i +1, false);
+                //prawo-dół(MOORE)
+                data = addCoordinates(mat, data, mat->colIndex[j] + 1, mat->y - i - 1, false);
+                //lewo-dół(MOORE)
+                data = addCoordinates(mat, data, mat->colIndex[j] - 1, mat->y - i - 1, false);
+            }
         }
     }
-    int* numPerLine = (int*)calloc(new_mat->y, sizeof(int));
+    int* numPerLine = calloc(newMat->y, sizeof(int));
     while(data != NULL) {
         if(DEBUG)
-            printf("(x, y)= ( %d, %d ), sasiadow: %d, wczesniejszy stan: %d  \n", data->x+1, data->y, data->neighbors, data->previous_alive==true ? 1 : 0);
-        if((data->previous_alive == true &&(data->neighbors == 2 || data->neighbors == 3)) ||(data->previous_alive == false && data->neighbors == 3)) {
-            new_mat->col_length++;
-            new_mat->col_index = (int*)realloc(new_mat->col_index, new_mat->col_length * sizeof(int));
-            new_mat->col_index[new_mat->col_length - 1] = data->x;
+            printf("(x, y)= ( %d, %d ), sasiadow: %d, wczesniejszy stan: %d  \n", data->x+1, data->y, data->neighbors, data->previousAlive==true ? 1 : 0);
+        if((data->previousAlive == true &&(data->neighbors == 2 || data->neighbors == 3)) ||(data->previousAlive == false && data->neighbors == 3)) {
+            newMat->colLength++;
+            newMat->colIndex = realloc(newMat->colIndex, newMat->colLength * sizeof(int));
+            newMat->colIndex[newMat->colLength-1] = data->x;
             numPerLine[mat->y - data->y]++;
         }
         data = data->next;
     }
     int sum = 0;
-    for(int i = 1; i <= mat->row_length; i++) {
+    for(int i = 1; i <= mat->rowLength; i++) {
         sum += numPerLine[i - 1];
-        new_mat->row_index[i] = sum;
+        newMat->rowIndex[i] = sum;
     }
-    return new_mat;
+    return newMat;
+}
+
+bool crsEquals(data crs1, data crs2) {
+    if(crs1.x != crs2.x || crs1.y != crs2.y || crs1.colLength != crs2.colLength || crs1.rowLength != crs2.rowLength)
+        return false;
+    for(int i = 0; i < crs1.rowLength; i++) {
+        if(crs1.rowIndex[i] != crs2.rowIndex[i])
+            return false;
+    }
+    for(int i = 0; i < crs1.colLength; i++) {
+        if(crs1.colIndex[i] != crs2.colIndex[i])
+            return false;
+    }
+    return true;
 }
