@@ -104,7 +104,6 @@ int main(int argc, char** argv) {
             printf("stan planszy w generacji %d:\n", i + 1);
             printMat(matrix);
             free(tmpMat);
-            free(matrix);
             break;
         }
         else
