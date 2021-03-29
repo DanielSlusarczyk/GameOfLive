@@ -138,8 +138,11 @@ int main(int argc, char** argv) {
     }
     else if(overwrite) {
         outFile = fopen(argv[1], "w");
-        fprintf(outFile, "%s", "udało się nadpisać plik\n");
+        writeFile(outFile, matrix);
     }
+
+    freeCRS(*matrix);
+    free(matrix);
 
     return 0;
 }
