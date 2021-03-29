@@ -13,9 +13,9 @@ typedef struct field {
     struct field* next;
 } field, *t_field;
 
-void printMat(t_crs);
-t_field addCoordinates(t_crs, t_field, int, int, bool);
-t_crs newGeneration(t_crs, char);
-bool CRSEquals(crs, crs);
+void printMat(t_data);
+t_field addCoordinates(t_data, t_field, int, int, bool);
+t_data newGeneration(t_data, char);
+bool CRSEquals(data, data);
 
 #endif

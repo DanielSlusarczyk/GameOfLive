@@ -1,6 +1,7 @@
 #ifndef _TGOLFILE
 #define _TGOLFILE
 
+#define DEBUG false
 #define DEFAULT_ARGC 3
 
 #include <stdio.h>
@@ -30,11 +31,11 @@ typedef struct {
     int* rowIndex;
     int colLength;
     int rowLength;
-} crs, *t_crs;
+} data, *t_data;
 
 bool contains(const char**, char*);
-ErrorCode readFile(FILE*, t_crs);
-void writeFile(FILE*, t_crs);
-void freeCRS(crs);
+ErrorCode readFile(FILE*, t_data);
+void writeFile(FILE*, t_data);
+void freeCRS(data);
 
 #endif

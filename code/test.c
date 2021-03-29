@@ -6,10 +6,6 @@
 #include "tgol_file.h"
 #include "tgol_evo.h"
 
-#ifndef DEBUG
-#define DEBUG false
-#endif
-
 int main(int argc, char** argv) {
     FILE* inFile = fopen(argv[1], "r");
     FILE* outFile = NULL;
@@ -77,17 +73,15 @@ int main(int argc, char** argv) {
         n++;
     }
 
-    crs mat;
+    data mat;
     ErrorCode errCode = readFile(inFile, &mat);
     if(errCode != COR) {
         printf("%s\n", Errors[errCode - 1]);
         return errCode;
     }
-    t_crs matrix = &mat;
-    freeCRS(mat);
+    t_data matrix = &mat;
     printf("Wczytana generacja:\n");
     printMat(matrix);
-    /*
     if(DEBUG) {
         printf("loaded %dx%d matrix from %s\n", mat.y, mat.x, argv[1]);
         printf("col index [ ");
@@ -99,24 +93,24 @@ int main(int argc, char** argv) {
             printf("%d ", mat.rowIndex[i]);
         printf("]\n");
     }
-    */
     if(!DEBUG) {
         system("clear");
     }
     //Przeprowadzanie wszystkich generacji
     for(int i = 0; i < atoi(argv[2]); i++) {
-        t_crs tmpMat = newGeneration(matrix, 'm');
+        t_data tmpMat = newGeneration(matrix, 'm');
         if(CRSEquals(*matrix, *tmpMat)) {
             printf("stan planszy ustalił się na generacji %d, kończę działanie programu\n", i + 1);
             printf("stan planszy w generacji %d:\n", i + 1);
             printMat(matrix);
             free(tmpMat);
+            free(matrix);
             break;
         }
         else
             matrix = tmpMat;
+        printMat(matrix);
         if(!DEBUG) {
-            printMat(matrix);
             if(sbs) {
                 printf("press ENTER to continue\n");
                 getchar();
@@ -126,7 +120,6 @@ int main(int argc, char** argv) {
             if(refresh)
                 system("clear");
         }
-        /*
         if(DEBUG) {
             printf("Wymiary: %d x %d\n", matrix->y, matrix->x);
             printf("ColIndex [ ");
@@ -138,7 +131,6 @@ int main(int argc, char** argv) {
                 printf("%d ", matrix->rowIndex[i]);
             printf("]\n");
         }
-        */
     }
 
     if(save) {
