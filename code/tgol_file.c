@@ -34,7 +34,7 @@ ErrorCode readFile(FILE* in, t_data mat) {
     mat->colLength = 0;
     mat->colIndex = NULL;
     //Czytanie pierwszej linii
-    if (fscanf(in, "%d %s %d", &ytemp, tmp, &xtemp) != 3)
+    if(fscanf(in, "%d %s %d", &ytemp, tmp, &xtemp) != 3)
         return INPUT_DIMS;
 
     int readRow = ytemp;
@@ -50,30 +50,53 @@ ErrorCode readFile(FILE* in, t_data mat) {
 
     //Czytanie reszty linii
     int amount;
-    while ((amount = fscanf(in, "%d %d", &xtemp, &ytemp)) != EOF) {
-        if (amount == 2) {
-            if (xtemp > mat->x || ytemp > mat->y || xtemp < 1 || ytemp < 1)
+    while((amount = fscanf(in, "%d %d", &xtemp, &ytemp)) != EOF) {
+        if(amount == 2) {
+            if(xtemp > mat->x || ytemp > mat->y || xtemp < 1 || ytemp < 1) {
                 return INPUT_LIMIT_XY;
-            if (readRow < ytemp)
+            }
+            if(readRow < ytemp) {
                 return INPUT_INCORRECT_ORDER;
-            if (readCol >= xtemp && readRow <= ytemp)
+            }
+            if(readCol >= xtemp && readRow <= ytemp) {
                 return INPUT_INCORRECT_ORDER;
+            }
             mat->colLength++;
             mat->colIndex = (int*)realloc(mat->colIndex, mat->colLength * sizeof(int));
             mat->colIndex[mat->colLength - 1] = xtemp - 1;
             numPerLine[mat->y - ytemp]++;
         }
-        else
+        else {
             return INPUT_INCORRECT;
-
+        }
         readRow = ytemp;
         readCol = xtemp;
     }
 
     int sum = 0;
-    for (int i = 1; i <= mat->y; i++) {
+    for(int i = 1; i <= mat->y; i++) {
         sum += numPerLine[i - 1];
         mat->rowIndex[i] = sum;
     }
+    fclose(in);
+    free(numPerLine);
     return COR;
+}
+
+void writeFile(FILE* out, t_data mat) {
+    fprintf(out, "%d x %d\n", mat->y, mat->x);
+    int colIterator = 0;
+    for(int i = 1; i < mat->rowLength; i++) {
+        int aliveCurrentRow = mat->rowIndex[i] - mat->rowIndex[i - 1];
+        for(int j = colIterator; j < colIterator + aliveCurrentRow; j++) {
+            fprintf(out, "%d %d\n", mat->colIndex[j] + 1, mat->x - i + 1);
+        }
+        colIterator += aliveCurrentRow;
+    }
+    fclose(out);
+}
+
+void freeCRS(data mat) {
+    free(mat.rowIndex);
+    free(mat.colIndex);
 }

@@ -35,5 +35,7 @@ typedef struct {
 
 bool contains(const char**, char*);
 ErrorCode readFile(FILE*, t_data);
+void writeFile(FILE*, t_data);
+void freeCRS(data);
 
 #endif

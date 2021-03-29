@@ -5,7 +5,7 @@
 
 extern char dead, alive;
 
-typedef struct field{
+typedef struct field {
     int x;
     int y;
     int neighbors;
@@ -16,6 +16,6 @@ typedef struct field{
 void printMat(t_data);
 t_field addCoordinates(t_data, t_field, int, int, bool);
 t_data newGeneration(t_data, char);
-bool crsEquals(data, data);
+bool CRSEquals(data, data);
 
 #endif

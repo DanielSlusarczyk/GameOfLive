@@ -102,8 +102,10 @@ t_data newGeneration(t_data mat, char mode) {
     }
     int* numPerLine = calloc(newMat->y, sizeof(int));
     while(data != NULL) {
+        /*
         if(DEBUG)
             printf("(x, y)= ( %d, %d ), sasiadow: %d, wczesniejszy stan: %d  \n", data->x+1, data->y, data->neighbors, data->previousAlive==true ? 1 : 0);
+        */
         if((data->previousAlive == true &&(data->neighbors == 2 || data->neighbors == 3)) ||(data->previousAlive == false && data->neighbors == 3)) {
             newMat->colLength++;
             newMat->colIndex = realloc(newMat->colIndex, newMat->colLength * sizeof(int));
@@ -120,7 +122,7 @@ t_data newGeneration(t_data mat, char mode) {
     return newMat;
 }
 
-bool crsEquals(data crs1, data crs2) {
+bool CRSEquals(data crs1, data crs2) {
     if(crs1.x != crs2.x || crs1.y != crs2.y || crs1.colLength != crs2.colLength || crs1.rowLength != crs2.rowLength)
         return false;
     for(int i = 0; i < crs1.rowLength; i++) {

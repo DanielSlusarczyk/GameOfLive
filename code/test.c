@@ -39,7 +39,8 @@ int main(int argc, char** argv) {
                 printf("%s\n", Errors[UNKNOWN_FLAG - 1]);
                 return UNKNOWN_FLAG;
             }
-            else if(strcmp(argv[n], "-sbs") == 0) sbs = true;
+            else if(strcmp(argv[n], "-sbs") == 0)
+                sbs = true;
             else if(strcmp(argv[n], "-save") == 0) {
                 if(overwrite) {
                     printf("%s\n", Errors[AMBIGUOUS_OUT - 1]);
@@ -92,34 +93,32 @@ int main(int argc, char** argv) {
             printf("%d ", mat.rowIndex[i]);
         printf("]\n");
     }
-    if(overwrite) {
-        fclose(inFile);
-        outFile = fopen(argv[1], "w");
-        fprintf(outFile, "%s", "udało się nadpisać plik\n");
-    }
-    if(save) {
-        fprintf(outFile, "%s", "udało się zapisać do pliku\n");
-    }
     if(!DEBUG) {
         system("clear");
     }
     //Przeprowadzanie wszystkich generacji
     for(int i = 0; i < atoi(argv[2]); i++) {
         t_data tmpMat = newGeneration(matrix, 'm');
-        if(crsEquals(*matrix, *tmpMat)) {
+        if(CRSEquals(*matrix, *tmpMat)) {
             printf("stan planszy ustalił się na generacji %d, kończę działanie programu\n", i + 1);
             printf("stan planszy w generacji %d:\n", i + 1);
             printMat(matrix);
             free(tmpMat);
             free(matrix);
-            return 0;
+            break;
         }
         else
             matrix = tmpMat;
         printMat(matrix);
         if(!DEBUG) {
-            system("sleep 0.33");
-            system("clear");
+            if(sbs) {
+                printf("press ENTER to continue\n");
+                getchar();
+            }
+            else
+                system("sleep 0.33");
+            if(refresh)
+                system("clear");
         }
         if(DEBUG) {
             printf("Wymiary: %d x %d\n", matrix->y, matrix->x);
@@ -133,5 +132,14 @@ int main(int argc, char** argv) {
             printf("]\n");
         }
     }
+
+    if(save) {
+        writeFile(outFile, matrix);
+    }
+    else if(overwrite) {
+        outFile = fopen(argv[1], "w");
+        fprintf(outFile, "%s", "udało się nadpisać plik\n");
+    }
+
     return 0;
 }
