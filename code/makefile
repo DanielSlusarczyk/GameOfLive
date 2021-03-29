@@ -1,5 +1,5 @@
 test: test.o tgol_file.o tgol_evo.o
-	cc test.o tgol_file.o tgol_evo.o -o test -lncurses
+	cc -g test.o tgol_file.o tgol_evo.o -o test -lncurses
 
 tgol_file.o: tgol_file.c
 	cc -c tgol_file.c
