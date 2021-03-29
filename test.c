@@ -73,23 +73,23 @@ int main(int argc, char** argv) {
     }
 
     data mat;
-    ErrorCode errCode = read_file(inFile, &mat);
+    ErrorCode errCode = readFile(inFile, &mat);
     if(errCode != COR) {
         printf("%s\n", Errors[errCode - 1]);
         return errCode;
     }
     t_data matrix = &mat;
     printf("Wczytana generacja:\n");
-    print_generation(matrix);
+    printMat(matrix);
     if(DEBUG) {
-        printf("Wymiary: %d x %d\n", mat.y, mat.x);
-        printf("Col_index [ ");
-        for(int i = 0; i < mat.col_length; i++)
-            printf("%d ", mat.col_index[i]);
+        printf("loaded %dx%d matrix from %s\n", mat.y, mat.x, argv[1]);
+        printf("col index [ ");
+        for(int i = 0; i < mat.colLength; i++)
+            printf("%d ", mat.colIndex[i]);
         printf("]\n");
-        printf("Row_index [ ");
-        for(int i = 0; i < mat.row_length; i++)
-            printf("%d ", mat.row_index[i]);
+        printf("row index [ ");
+        for(int i = 0; i < mat.rowLength; i++)
+            printf("%d ", mat.rowIndex[i]);
         printf("]\n");
     }
     if(overwrite) {
@@ -105,21 +105,31 @@ int main(int argc, char** argv) {
     }
     //Przeprowadzanie wszystkich generacji
     for(int i = 0; i < atoi(argv[2]); i++) {
-        matrix = new_generation(matrix);
-        print_generation(matrix);
+        t_data tmpMat = newGeneration(matrix, 'm');
+        if(crsEquals(*matrix, *tmpMat)) {
+            printf("stan planszy ustalił się na generacji %d, kończę działanie programu\n", i + 1);
+            printf("stan planszy w generacji %d:\n", i + 1);
+            printMat(matrix);
+            free(tmpMat);
+            free(matrix);
+            return 0;
+        }
+        else
+            matrix = tmpMat;
+        printMat(matrix);
         if(!DEBUG) {
-            system("sleep 0.08");
+            system("sleep 0.33");
             system("clear");
         }
         if(DEBUG) {
             printf("Wymiary: %d x %d\n", matrix->y, matrix->x);
-            printf("Col_index [ ");
-            for(int i = 0; i < matrix->col_length; i++)
-                printf("%d ", matrix->col_index[i]);
+            printf("ColIndex [ ");
+            for(int i = 0; i < matrix->colLength; i++)
+                printf("%d ", matrix->colIndex[i]);
             printf("]\n");
-            printf("Row_index [ ");
-            for(int i = 0; i < matrix->row_length; i++)
-                printf("%d ", matrix->row_index[i]);
+            printf("RowIndex [ ");
+            for(int i = 0; i < matrix->rowLength; i++)
+                printf("%d ", matrix->rowIndex[i]);
             printf("]\n");
         }
     }
