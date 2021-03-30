@@ -1,7 +1,6 @@
 #ifndef _TGOLFILE
 #define _TGOLFILE
 
-#define DEBUG false
 #define DEFAULT_ARGC 3
 
 #include <stdio.h>

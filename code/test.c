@@ -6,6 +6,10 @@
 #include "tgol_file.h"
 #include "tgol_evo.h"
 
+#ifndef DEBUG
+#define DEBUG false
+#endif
+
 int main(int argc, char** argv) {
     FILE* inFile = fopen(argv[1], "r");
     FILE* outFile = NULL;
