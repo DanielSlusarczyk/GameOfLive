@@ -115,7 +115,6 @@ int main(int argc, char** argv) {
         }
         else {
             matrix = tmpMat;
-            free(tmpMat);
         }
         printMat(matrix);
         if(!DEBUG) {

@@ -10,13 +10,13 @@ char dead = '.';
 char alive = 'X';
 
 void printMat(t_data mat) {
-        int ite_col = 0;
+        int colIterator = 0;
         for(int i = 0; i < mat->y; i++) {
             for(int j = 0; j < mat->x; j++) {
                 if(mat->colIndex != NULL) {
-                    if(mat->colIndex[ite_col] == j && mat->rowIndex[i + 1] > ite_col) {
+                    if(mat->colIndex[colIterator] == j && mat->rowIndex[i + 1] > colIterator) {
                         printf("%c ", alive);
-                        ite_col++;
+                        colIterator++;
                     }
                     else
                         printf("%c ", dead);
