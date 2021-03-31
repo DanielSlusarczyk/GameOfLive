@@ -23,6 +23,7 @@ int main(int argc, char** argv) {
         return INCORRECT_NUMBER_OF_ARGS;
     }
     if(inFile == NULL) {
+        fclose(inFile);
         printf("%s\n", Errors[FILE_OPEN_ERR - 1]);
         return FILE_OPEN_ERR;
     }
@@ -54,6 +55,7 @@ int main(int argc, char** argv) {
                 if(argv[n + 1][0] != '-') {
                     outFile = fopen(argv[n + 1], "w");
                     if(outFile == NULL) {
+                        fclose(outFile);
                         printf("%s\n", Errors[NO_OUT - 1]);
                         return NO_OUT;
                     }
@@ -81,6 +83,7 @@ int main(int argc, char** argv) {
     ErrorCode errCode = readFile(inFile, &mat);
     if(errCode != COR) {
         printf("%s\n", Errors[errCode - 1]);
+        freeCRS(mat);
         return errCode;
     }
     t_data matrix = &mat;
@@ -110,8 +113,10 @@ int main(int argc, char** argv) {
             free(tmpMat);
             break;
         }
-        else
+        else {
             matrix = tmpMat;
+            free(tmpMat);
+        }
         printMat(matrix);
         if(!DEBUG) {
             if(sbs) {

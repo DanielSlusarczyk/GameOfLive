@@ -31,7 +31,7 @@ void printMat(t_data mat) {
 t_field addCoordinates(t_data m, t_field lista, int a, int b, bool al) {
     if(a >= 0 && a < m->x && b > 0 && b <= m->y) {
         if(lista == NULL ||(lista->x > a && lista->y <= b) ||(lista->y < b)) {
-            t_field n = calloc(1, sizeof(field));
+            t_field n = calloc(1, sizeof(field)); //wyciek
             n->x = a;
             n->y = b;
             n->previousAlive = al;
@@ -114,6 +114,7 @@ t_data newGeneration(t_data mat, char mode) {
         }
         data = data->next;
     }
+    free(data);
     int sum = 0;
     for(int i = 1; i <= mat->rowLength; i++) {
         sum += numPerLine[i - 1];

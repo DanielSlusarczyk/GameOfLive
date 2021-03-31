@@ -34,16 +34,17 @@ ErrorCode readFile(FILE* in, t_data mat) {
     mat->colLength = 0;
     mat->colIndex = NULL;
     //Czytanie pierwszej linii
-    if(fscanf(in, "%d %s %d", &ytemp, tmp, &xtemp) != 3)
+    if(fscanf(in, "%d %s %d", &ytemp, tmp, &xtemp) != 3) {
+        fclose(in);
         return INPUT_DIMS;
-
+    }
     int readRow = ytemp;
     int readCol = 0;
 
     //Inicjalizowanie struktury
     mat->x = xtemp;
     mat->y = ytemp;
-    mat->rowIndex = calloc(mat->y + 1, sizeof(int));
+    mat->rowIndex = calloc(mat->y + 1, sizeof(int)); //wyciek
     mat->rowIndex[0] = 0;
     mat->rowLength = mat->y+1;
     int* numPerLine = calloc(ytemp, sizeof(int));
@@ -53,20 +54,36 @@ ErrorCode readFile(FILE* in, t_data mat) {
     while((amount = fscanf(in, "%d %d", &xtemp, &ytemp)) != EOF) {
         if(amount == 2) {
             if(xtemp > mat->x || ytemp > mat->y || xtemp < 1 || ytemp < 1) {
+                fclose(in);
+                free(mat->rowIndex);
+                free(mat);
+                free(numPerLine);
                 return INPUT_LIMIT_XY;
             }
             if(readRow < ytemp) {
+                fclose(in);
+                free(mat->rowIndex);
+                free(mat);
+                free(numPerLine);
                 return INPUT_INCORRECT_ORDER;
             }
             if(readCol >= xtemp && readRow <= ytemp) {
+                fclose(in);
+                free(mat->rowIndex);
+                free(mat);
+                free(numPerLine);
                 return INPUT_INCORRECT_ORDER;
             }
             mat->colLength++;
-            mat->colIndex = (int*)realloc(mat->colIndex, mat->colLength * sizeof(int));
+            mat->colIndex = (int*)realloc(mat->colIndex, mat->colLength * sizeof(int)); //wyciek
             mat->colIndex[mat->colLength - 1] = xtemp - 1;
             numPerLine[mat->y - ytemp]++;
         }
         else {
+            fclose(in);
+            free(mat->rowIndex);
+            free(mat);
+            free(numPerLine);
             return INPUT_INCORRECT;
         }
         readRow = ytemp;
