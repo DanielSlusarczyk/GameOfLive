@@ -31,7 +31,7 @@ void printMat(t_data mat) {
 t_field addCoordinates(t_data m, t_field lista, int a, int b, bool al) {
     if (a >= 0 && a < m->x && b > 0 && b <= m->y) {
         if (lista == NULL || (lista->x > a && lista->y <= b) || (lista->y < b)) {
-            t_field n =(t_field)calloc(1, sizeof(field)); //wyciek
+            t_field n =(t_field)calloc(1, sizeof(field));
             n->x = a;
             n->y = b;
             n->previousAlive = al;
@@ -63,7 +63,6 @@ t_field addCoordinates(t_data m, t_field lista, int a, int b, bool al) {
         return lista;
 }
 
-//tryby: 'm' - s�siedztwo moore'a, 'n' - s�siedztwo von
 t_data newGeneration(t_data mat, char mode) {
     t_data newMat =(t_data)calloc(1, sizeof(data));
     newMat->rowLength = mat->y + 1;
@@ -79,35 +78,22 @@ t_data newGeneration(t_data mat, char mode) {
 
     for (int i = 0; i < mat->y; i++) {
         for (int j = mat->rowIndex[i]; j < mat->rowIndex[i + 1]; j++) {
-            //lewo
-            data = addCoordinates(mat, data, mat->colIndex[j] - 1, mat->y - i, false);
-            //g�ra
-            data = addCoordinates(mat, data, mat->colIndex[j], mat->y - i + 1, false);
-            //prawo
-            data = addCoordinates(mat, data, mat->colIndex[j] + 1, mat->y - i, false);
-            //d�
-            data = addCoordinates(mat, data, mat->colIndex[j], mat->y - i - 1, false);
-            //�rodek
-            data = addCoordinates(mat, data, mat->colIndex[j], mat->y - i, true);
+            data = addCoordinates(mat, data, mat->colIndex[j] - 1, mat->y - i, false); //lewo
+            data = addCoordinates(mat, data, mat->colIndex[j], mat->y - i + 1, false); //góra
+            data = addCoordinates(mat, data, mat->colIndex[j] + 1, mat->y - i, false); //prawo
+            data = addCoordinates(mat, data, mat->colIndex[j], mat->y - i - 1, false); //dół
+            data = addCoordinates(mat, data, mat->colIndex[j], mat->y - i, true); //środek
             if (mode == 'm') {
-                //lewo-g�ra(MOORE)
-                data = addCoordinates(mat, data, mat->colIndex[j] - 1, mat->y - i + 1, false);
-                //prawo-g�ra(MOORE)
-                data = addCoordinates(mat, data, mat->colIndex[j] + 1, mat->y - i + 1, false);
-                //prawo-d�(MOORE)
-                data = addCoordinates(mat, data, mat->colIndex[j] + 1, mat->y - i - 1, false);
-                //lewo-d�(MOORE)
-                data = addCoordinates(mat, data, mat->colIndex[j] - 1, mat->y - i - 1, false);
+                data = addCoordinates(mat, data, mat->colIndex[j] - 1, mat->y - i + 1, false); //lewo-góra (moore)
+                data = addCoordinates(mat, data, mat->colIndex[j] + 1, mat->y - i + 1, false); //prawo-góra (moore)
+                data = addCoordinates(mat, data, mat->colIndex[j] + 1, mat->y - i - 1, false); //prawo-dół (moore)
+                data = addCoordinates(mat, data, mat->colIndex[j] - 1, mat->y - i - 1, false); //lewo-dół (moore)
             }
         }
     }
     int* numPerLine =(int*)calloc(newMat->y, sizeof(int));
     tmpdata = data;
     while (data != NULL) {
-        /*
-        if(DEBUG)
-            printf("(x, y)= ( %d, %d ), sasiadow: %d, wczesniejszy stan: %d  \n", data->x+1, data->y, data->neighbors, data->previousAlive==true ? 1 : 0);
-        */
         if ((data->previousAlive == true && (data->neighbors == 2 || data->neighbors == 3)) || (data->previousAlive == false && data->neighbors == 3)) {
             newMat->colLength++;
             newMat->colIndex =(int*)realloc(newMat->colIndex, newMat->colLength * sizeof(int));
@@ -144,7 +130,7 @@ bool CRSEquals(data crs1, data crs2) {
 }
 
 void freeMem(t_field f) {
-    if (f) {
+    if(f) {
         freeMem(f->next);
         free(f);
     }

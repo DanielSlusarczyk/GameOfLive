@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <unistd.h>
 #include "tgol_file.h"
 #include "tgol_evo.h"
 
@@ -17,48 +18,49 @@ int main(int argc, char** argv) {
     bool save = false;
     bool overwrite = false;
     bool refresh = false;
+    double sleepTime = 1;
 
-    if (argc < DEFAULT_ARGC) {
+    if(argc < DEFAULT_ARGC) {
         printf("%s\n", Errors[INCORRECT_NUMBER_OF_ARGS - 1]);
         return INCORRECT_NUMBER_OF_ARGS;
     }
-    if (inFile == NULL) {
+    if(inFile == NULL) {
         fclose(inFile);
         printf("%s\n", Errors[FILE_OPEN_ERR - 1]);
         return FILE_OPEN_ERR;
     }
 
-    if (atoi(argv[2]) <= 0) {
+    if(atoi(argv[2]) <= 0) {
         printf("%s\n", Errors[INCORRECT_GENS - 1]);
         fclose(inFile);
         return INCORRECT_GENS;
     }
 
     int n = DEFAULT_ARGC;
-    while (n < argc) {
-        if (argv[n][0] != '-') {
+    while(n < argc) {
+        if(argv[n][0] != '-') {
             printf("%s\n", Errors[UNKNOWN_FLAG - 1]);
             fclose(inFile);
             return UNKNOWN_FLAG;
         }
         else {
-            if (!contains(knownFlags, argv[n])) {
+            if(!contains(knownFlags, argv[n])) {
                 printf("%s\n", Errors[UNKNOWN_FLAG - 1]);
                 fclose(inFile);
                 return UNKNOWN_FLAG;
             }
-            else if (strcmp(argv[n], "-sbs") == 0)
+            else if(strcmp(argv[n], "-sbs") == 0)
                 sbs = true;
-            else if (strcmp(argv[n], "-save") == 0) {
-                if (overwrite) {
+            else if(strcmp(argv[n], "-save") == 0) {
+                if(overwrite) {
                     printf("%s\n", Errors[AMBIGUOUS_OUT - 1]);
                     fclose(inFile);
                     return AMBIGUOUS_OUT;
                 }
                 save = true;
-                if (argv[n + 1][0] != '-') {
+                if(argv[n + 1][0] != '-') {
                     outFile = fopen(argv[n + 1], "w");
-                    if (outFile == NULL) {
+                    if(outFile == NULL) {
                         fclose(outFile);
                         printf("%s\n", Errors[NO_OUT - 1]);
                         fclose(inFile);
@@ -72,50 +74,65 @@ int main(int argc, char** argv) {
                     return NO_OUT;
                 }
             }
-            else if (strcmp(argv[n], "-overwrite") == 0) {
-                if (save) {
+            else if(strcmp(argv[n], "-overwrite") == 0) {
+                if(save) {
                     printf("%s\n", Errors[AMBIGUOUS_OUT - 1]);
                     fclose(inFile);
                     return AMBIGUOUS_OUT;
                 }
                 overwrite = true;
             }
-            else if (strcmp(argv[n], "-refresh") == 0)
+            else if(strcmp(argv[n], "-refresh") == 0) {
                 refresh = true;
+                if(argv[n + 1] != NULL && argv[n + 1][0] != '-') {
+                    sleepTime = atof(argv[++n]);
+                    printf("wczytano czas odświeżenia ekranu: %.2lf\n", sleepTime);
+                    printf("wciśnij ENTER aby kontynuować\n");
+                    getchar();
+                }
+                else {
+                    sleepTime = 0.8;
+                    printf("ustawiono domyślny czas odświeżenia ekranu: %.2lf\n", sleepTime);
+                    printf("wciśnij ENTER aby kontynuować\n");
+                    getchar();
+                }
+            }
         }
         n++;
     }
 
     data mat;
     ErrorCode errCode = readFile(inFile, &mat);
-    if (errCode != COR) {
+    if(errCode != COR) {
         printf("%s\n", Errors[errCode - 1]);
         return errCode;
     }
     t_data matrix = &mat;
     printf("Wczytana generacja:\n");
     printMat(matrix);
-    if (DEBUG) {
+    if(DEBUG) {
         printf("loaded %dx%d matrix from %s\n", mat.y, mat.x, argv[1]);
         printf("col index [ ");
-        for (int i = 0; i < mat.colLength; i++)
+        for(int i = 0; i < mat.colLength; i++)
             printf("%d ", mat.colIndex[i]);
         printf("]\n");
         printf("row index [ ");
-        for (int i = 0; i < mat.rowLength; i++)
+        for(int i = 0; i < mat.rowLength; i++)
             printf("%d ", mat.rowIndex[i]);
         printf("]\n");
     }
-    if (!DEBUG) {
+    if(!DEBUG) {
         system("clear");
     }
-    //Przeprowadzanie wszystkich generacji
+
     t_data tmpMat = NULL;
-    for (int i = 0; i < atoi(argv[2]); i++) {
+    for(int i = 0; i < atoi(argv[2]); i++) {
         tmpMat = newGeneration(matrix, 'm');
-        if (CRSEquals(*matrix, *tmpMat)) {
+        if(CRSEquals(*matrix, *tmpMat)) {
             printf("stan planszy ustalił się na generacji %d, kończę działanie programu\n", i + 1);
             printf("stan planszy w generacji %d:\n", i + 1);
+            printf("wciśnij ENTER aby kontynuować\n");
+            getchar();
             printMat(matrix);
             free(tmpMat);
             break;
@@ -126,33 +143,33 @@ int main(int argc, char** argv) {
             matrix = tmpMat;
         }
         printMat(matrix);
-        if (!DEBUG) {
-            if (sbs) {
+        if(!DEBUG) {
+            if(sbs) {
                 printf("press ENTER to continue\n");
                 getchar();
             }
-            else
-                system("sleep 0.33");
-            if (refresh)
+            else if(refresh)
+                usleep(1000000 * sleepTime);
+            if(refresh)
                 system("clear");
         }
-        if (DEBUG) {
+        if(DEBUG) {
             printf("Wymiary: %d x %d\n", matrix->y, matrix->x);
             printf("ColIndex [ ");
-            for (int i = 0; i < matrix->colLength; i++)
+            for(int i = 0; i < matrix->colLength; i++)
                 printf("%d ", matrix->colIndex[i]);
             printf("]\n");
             printf("RowIndex [ ");
-            for (int i = 0; i < matrix->rowLength; i++)
+            for(int i = 0; i < matrix->rowLength; i++)
                 printf("%d ", matrix->rowIndex[i]);
             printf("]\n");
         }
     }
 
-    if (save) {
+    if(save) {
         writeFile(outFile, matrix);
     }
-    else if (overwrite) {
+    else if(overwrite) {
         outFile = fopen(argv[1], "w");
         writeFile(outFile, matrix);
     }
