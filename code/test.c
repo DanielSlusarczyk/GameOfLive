@@ -30,6 +30,7 @@ int main(int argc, char** argv) {
 
     if (atoi(argv[2]) <= 0) {
         printf("%s\n", Errors[INCORRECT_GENS - 1]);
+        fclose(inFile);
         return INCORRECT_GENS;
     }
 
@@ -37,11 +38,13 @@ int main(int argc, char** argv) {
     while (n < argc) {
         if (argv[n][0] != '-') {
             printf("%s\n", Errors[UNKNOWN_FLAG - 1]);
+            fclose(inFile);
             return UNKNOWN_FLAG;
         }
         else {
             if (!contains(knownFlags, argv[n])) {
                 printf("%s\n", Errors[UNKNOWN_FLAG - 1]);
+                fclose(inFile);
                 return UNKNOWN_FLAG;
             }
             else if (strcmp(argv[n], "-sbs") == 0)
@@ -49,6 +52,7 @@ int main(int argc, char** argv) {
             else if (strcmp(argv[n], "-save") == 0) {
                 if (overwrite) {
                     printf("%s\n", Errors[AMBIGUOUS_OUT - 1]);
+                    fclose(inFile);
                     return AMBIGUOUS_OUT;
                 }
                 save = true;
@@ -57,18 +61,21 @@ int main(int argc, char** argv) {
                     if (outFile == NULL) {
                         fclose(outFile);
                         printf("%s\n", Errors[NO_OUT - 1]);
+                        fclose(inFile);
                         return NO_OUT;
                     }
                     n++;
                 }
                 else {
                     printf("%s\n", Errors[NO_OUT - 1]);
+                    fclose(inFile);
                     return NO_OUT;
                 }
             }
             else if (strcmp(argv[n], "-overwrite") == 0) {
                 if (save) {
                     printf("%s\n", Errors[AMBIGUOUS_OUT - 1]);
+                    fclose(inFile);
                     return AMBIGUOUS_OUT;
                 }
                 overwrite = true;
