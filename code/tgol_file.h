@@ -23,18 +23,17 @@ typedef enum {
     COR
 } ErrorCode;
 
-typedef struct {
+typedef struct data {
     int x;
     int y;
     int* colIndex;
     int* rowIndex;
     int colLength;
     int rowLength;
-} data, *t_data;
+} data, * t_data;
 
 bool contains(const char**, char*);
 ErrorCode readFile(FILE*, t_data);
 void writeFile(FILE*, t_data);
-void freeCRS(data);
 
 #endif

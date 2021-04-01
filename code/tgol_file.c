@@ -21,8 +21,8 @@ const char* Errors[10] = {
 bool contains(const char** array, char* s) {
     bool ret = false;
     int lim = sizeof(knownFlags) / sizeof(const char*);
-    for(int i = 0; i < lim; i++) {
-        if(strcmp(array[i], s) == 0)
+    for (int i = 0; i < lim; i++) {
+        if (strcmp(array[i], s) == 0)
             ret = true;
     }
     return ret;
@@ -34,7 +34,7 @@ ErrorCode readFile(FILE* in, t_data mat) {
     mat->colLength = 0;
     mat->colIndex = NULL;
     //Czytanie pierwszej linii
-    if(fscanf(in, "%d %s %d", &ytemp, tmp, &xtemp) != 3) {
+    if (fscanf(in, "%d %s %d", &ytemp, tmp, &xtemp) != 3) {
         fclose(in);
         return INPUT_DIMS;
     }
@@ -44,30 +44,30 @@ ErrorCode readFile(FILE* in, t_data mat) {
     //Inicjalizowanie struktury
     mat->x = xtemp;
     mat->y = ytemp;
-    mat->rowIndex = calloc(mat->y + 1, sizeof(int)); //wyciek
+    mat->rowIndex =(int*)calloc(mat->y + 1, sizeof(int)); //wyciek
     mat->rowIndex[0] = 0;
-    mat->rowLength = mat->y+1;
-    int* numPerLine = calloc(ytemp, sizeof(int));
+    mat->rowLength = mat->y + 1;
+    int* numPerLine =(int*)calloc(ytemp, sizeof(int));
 
     //Czytanie reszty linii
     int amount;
-    while((amount = fscanf(in, "%d %d", &xtemp, &ytemp)) != EOF) {
-        if(amount == 2) {
-            if(xtemp > mat->x || ytemp > mat->y || xtemp < 1 || ytemp < 1) {
+    while ((amount = fscanf(in, "%d %d", &xtemp, &ytemp)) != EOF) {
+        if (amount == 2) {
+            if (xtemp > mat->x || ytemp > mat->y || xtemp < 1 || ytemp < 1) {
                 fclose(in);
                 free(mat->rowIndex);
                 free(mat);
                 free(numPerLine);
                 return INPUT_LIMIT_XY;
             }
-            if(readRow < ytemp) {
+            if (readRow < ytemp) {
                 fclose(in);
                 free(mat->rowIndex);
                 free(mat);
                 free(numPerLine);
                 return INPUT_INCORRECT_ORDER;
             }
-            if(readCol >= xtemp && readRow <= ytemp) {
+            if (readCol >= xtemp && readRow <= ytemp) {
                 fclose(in);
                 free(mat->rowIndex);
                 free(mat);
@@ -91,7 +91,7 @@ ErrorCode readFile(FILE* in, t_data mat) {
     }
 
     int sum = 0;
-    for(int i = 1; i <= mat->y; i++) {
+    for (int i = 1; i <= mat->y; i++) {
         sum += numPerLine[i - 1];
         mat->rowIndex[i] = sum;
     }
@@ -103,9 +103,9 @@ ErrorCode readFile(FILE* in, t_data mat) {
 void writeFile(FILE* out, t_data mat) {
     fprintf(out, "%d x %d\n", mat->y, mat->x);
     int colIterator = 0;
-    for(int i = 1; i < mat->rowLength; i++) {
+    for (int i = 1; i < mat->rowLength; i++) {
         int aliveCurrentRow = mat->rowIndex[i] - mat->rowIndex[i - 1];
-        for(int j = colIterator; j < colIterator + aliveCurrentRow; j++) {
+        for (int j = colIterator; j < colIterator + aliveCurrentRow; j++) {
             fprintf(out, "%d %d\n", mat->colIndex[j] + 1, mat->x - i + 1);
         }
         colIterator += aliveCurrentRow;
@@ -113,7 +113,3 @@ void writeFile(FILE* out, t_data mat) {
     fclose(out);
 }
 
-void freeCRS(data mat) {
-    free(mat.rowIndex);
-    free(mat.colIndex);
-}

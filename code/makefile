@@ -1,5 +1,5 @@
 test: test.o tgol_file.o tgol_evo.o
-	cc test.o tgol_file.o tgol_evo.o -o test -lncurses
+	cc test.o tgol_file.o tgol_evo.o -o test
 
 tgol_file.o: tgol_file.c
 	cc -c tgol_file.c
@@ -11,7 +11,7 @@ test.o: test.c
 	cc -c test.c
 
 debug: test.o tgol_file.o tgol_evo.o
-	cc -DDEBUG=true -g test.c tgol_file.c tgol_evo.c -o test -lncurses
+	cc -DDEBUG=true -g test.c tgol_file.c tgol_evo.c -o test
 
 clean:
 	rm *.o test

@@ -11,11 +11,12 @@ typedef struct field {
     int neighbors;
     bool previousAlive;
     struct field* next;
-} field, *t_field;
+} field, * t_field;
 
 void printMat(t_data);
 t_field addCoordinates(t_data, t_field, int, int, bool);
 t_data newGeneration(t_data, char);
 bool CRSEquals(data, data);
+void freeMem(t_field);
 
 #endif
