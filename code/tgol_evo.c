@@ -108,8 +108,6 @@ t_data newGeneration(t_data mat, char mode) {
         sum += numPerLine[i - 1];
         newMat->rowIndex[i] = sum;
     }
-    free(mat->colIndex);
-    free(mat->rowIndex);
     freeMem(tmpdata);
     free(numPerLine);
     return newMat;

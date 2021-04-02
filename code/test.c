@@ -128,16 +128,18 @@ int main(int argc, char** argv) {
     t_data tmpMat = NULL;
     for(int i = 0; i < atoi(argv[2]); i++) {
         tmpMat = newGeneration(matrix, 'm');
+	printf("GENERACJA NUMER: %d\n", i+1);
         if(CRSEquals(*matrix, *tmpMat)) {
-            printf("stan planszy ustalił się na generacji %d, kończę działanie programu\n", i + 1);
-            printf("stan planszy w generacji %d:\n", i + 1);
+	    printMat(matrix);
+            printf("stan planszy ustalony, koniec programu\n");
             printf("wciśnij ENTER aby kontynuować\n");
             getchar();
-            printMat(matrix);
             free(tmpMat);
             break;
         }
         else {
+	    free(matrix->colIndex);
+	    free(matrix->rowIndex);
             if(i!=0)
                 free(matrix);
             matrix = tmpMat;
@@ -150,7 +152,7 @@ int main(int argc, char** argv) {
             }
             else if(refresh)
                 usleep(1000000 * sleepTime);
-            if(refresh)
+            if(refresh && i!=atoi(argv[2])-1)
                 system("clear");
         }
         if(DEBUG) {
