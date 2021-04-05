@@ -3,8 +3,10 @@
 #include <string.h>
 #include <stdbool.h>
 #include <unistd.h>
+#include <string.h>
 #include "tgol_file.h"
 #include "tgol_evo.h"
+#include "tgol_png.h"
 
 #ifndef DEBUG
 #define DEBUG false
@@ -18,6 +20,8 @@ int main(int argc, char** argv) {
     bool overwrite = false;
     bool refresh = false;
     double sleepTime = 1;
+    const char *fileExte = ".png";
+    char fileName [30];
 
     if(argc < DEFAULT_ARGC) {
         printf("%s\n", Errors[INCORRECT_NUMBER_OF_ARGS - 1]);
@@ -56,11 +60,15 @@ int main(int argc, char** argv) {
                     fclose(inFile);
                     return AMBIGUOUS_OUT;
                 }
+		if(argc == n+1){
+			printf("%s\n", Errors[NO_OUT - 1]);
+			return NO_OUT;
+		}
                 save = true;
                 if(argv[n + 1][0] != '-') {
                     outFile = fopen(argv[n + 1], "w");
+		    strcpy(fileName, argv[n+1]);
                     if(outFile == NULL) {
-                        fclose(outFile);
                         printf("%s\n", Errors[NO_OUT - 1]);
                         fclose(inFile);
                         return NO_OUT;
@@ -169,6 +177,7 @@ int main(int argc, char** argv) {
 
     if(save) {
         writeFile(outFile, matrix);
+	generateImg(matrix->x, matrix->y, strcat( fileName, fileExte), matrix);
     }
     else if(overwrite) {
         outFile = fopen(argv[1], "w");
