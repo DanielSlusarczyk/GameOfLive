@@ -20,7 +20,8 @@ int main(int argc, char** argv) {
     bool overwrite = false;
     bool refresh = false;
     double sleepTime = 1;
-    const char *fileExte = ".png";
+    const char* txtExtension = ".txt";
+    const char* pngExtension = ".png";
     char fileName [30];
 
     if(argc < DEFAULT_ARGC) {
@@ -66,8 +67,8 @@ int main(int argc, char** argv) {
 		}
                 save = true;
                 if(argv[n + 1][0] != '-') {
-                    outFile = fopen(argv[n + 1], "w");
-		    strcpy(fileName, argv[n+1]);
+		            strcpy(fileName, argv[n+1]);
+                    outFile = fopen(strcat(argv[n + 1], txtExtension), "w");
                     if(outFile == NULL) {
                         printf("%s\n", Errors[NO_OUT - 1]);
                         fclose(inFile);
@@ -147,7 +148,7 @@ int main(int argc, char** argv) {
         else {
 	    free(matrix->colIndex);
 	    free(matrix->rowIndex);
-            if(i!=0)
+            if(i != 0)
                 free(matrix);
             matrix = tmpMat;
         }
@@ -176,12 +177,12 @@ int main(int argc, char** argv) {
     }
 
     if(save) {
-        writeFile(outFile, matrix);
-	generateImg(matrix->x, matrix->y, strcat( fileName, fileExte), matrix);
+        writeTxt(outFile, matrix);
+	    generateImg(matrix->x, matrix->y, strcat(fileName, pngExtension), matrix);
     }
     else if(overwrite) {
         outFile = fopen(argv[1], "w");
-        writeFile(outFile, matrix);
+        writeTxt(outFile, matrix);
     }
     free(tmpMat->colIndex);
     free(tmpMat->rowIndex);

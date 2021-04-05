@@ -34,6 +34,6 @@ typedef struct data {
 
 bool contains(const char**, char*);
 ErrorCode readFile(FILE*, t_data);
-void writeFile(FILE*, t_data);
+void writeTxt(FILE*, t_data);
 
 #endif

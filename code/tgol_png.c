@@ -8,12 +8,13 @@
 #include "tgol_png.h"
 
 
-void generateImg(int width_x, int heigh_y, char* file_name, t_data mat){
-	int sideLength = width_x > heigh_y ? (MAXDIM - MAXDIM % width_x)/width_x : (MAXDIM - MAXDIM % heigh_y)/heigh_y;
-	makeImg(sideLength, mat);
-	writeImg(file_name);
+void generateImg(int width_x, int heigh_y, char* file_name, t_data mat) {
+  int sideLength = width_x > heigh_y ? (MAXDIM - MAXDIM % width_x)/width_x : (MAXDIM - MAXDIM % heigh_y)/heigh_y;
+  makeImg(sideLength, mat);
+  writeImg(file_name);
 }
-void makeImg(int sideLength, t_data mat){
+
+void makeImg(int sideLength, t_data mat) {
   width = sideLength * mat->x;
   height = sideLength * mat->y;
   bit_depth = 8;
@@ -25,32 +26,31 @@ void makeImg(int sideLength, t_data mat){
     row_pointers[y] = (png_byte*) malloc(sizeof(png_byte) * (mat->x * sideLength));
 
   for (int i = 0; i < mat->y; i++) {
-	  int* tmp = (int*)calloc((mat->rowIndex[i+1] - mat->rowIndex[i]+1), sizeof(int));
-	  //int* tmp = (int*)malloc((mat->rowIndex[i+1] - mat->rowIndex[i]+1) * sizeof(int)); 
-	  for (int k = mat->rowIndex[i]; k < mat->rowIndex[i+1]; k++){
-		  tmp[k - mat->rowIndex[i]] = mat->colIndex[k];
-	  }
-	  for (int p = i * sideLength; p < (i+1) * sideLength; p++){
-		  int colIte = 0;
-		  int t;
-		  int tt = 0;
-		  png_byte* row = row_pointers[p];
-		  for (int q = 0; q < mat->x * sideLength; q++){
-			t = ((q-(q % sideLength))/sideLength);
-			if(t == tmp[colIte] && colIte < (mat->rowIndex[i+1] - mat->rowIndex[i])){
-				tt++;
-				row[q] = 0;
-				if(tt==sideLength){
-					if(colIte < (mat->rowIndex[i+1] - mat->rowIndex[i]))
-						colIte++;
-					tt=0;
-				}
-			}
-			else
-				row[q] = 255;
-		  }
-	  }
-	  free(tmp);  
+    int* tmp = (int*)calloc((mat->rowIndex[i+1] - mat->rowIndex[i]+1), sizeof(int));
+    for (int k = mat->rowIndex[i]; k < mat->rowIndex[i+1]; k++){
+      tmp[k - mat->rowIndex[i]] = mat->colIndex[k];
+    }
+    for (int p = i * sideLength; p < (i+1) * sideLength; p++){
+      int colIte = 0;
+      int t;
+      int tt = 0;
+      png_byte* row = row_pointers[p];
+      for (int q = 0; q < mat->x * sideLength; q++){
+      t = ((q-(q % sideLength))/sideLength);
+      if(t == tmp[colIte] && colIte < (mat->rowIndex[i+1] - mat->rowIndex[i])){
+        tt++;
+        row[q] = 0;
+        if(tt == sideLength){
+          if(colIte < (mat->rowIndex[i+1] - mat->rowIndex[i]))
+            colIte++;
+          tt=0;
+        }
+      }
+      else
+        row[q] = 255;
+      }
+    }
+    free(tmp);  
   }
 }
 void writeImg(char* file_name) {
@@ -90,7 +90,6 @@ void writeImg(char* file_name) {
     printf("[write_png_file] Error during end of write");
 
   png_write_end(png_ptr, NULL);
-
 
   fclose(fp);
 }

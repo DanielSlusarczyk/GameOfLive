@@ -22,8 +22,9 @@ bool contains(const char** array, char* s) {
     bool ret = false;
     int lim = sizeof(knownFlags) / sizeof(const char*);
     for (int i = 0; i < lim; i++) {
-        if (strcmp(array[i], s) == 0)
+        if (strcmp(array[i], s) == 0) {
             ret = true;
+        }
     }
     return ret;
 }
@@ -43,10 +44,10 @@ ErrorCode readFile(FILE* in, t_data mat) {
 
     mat->x = xtemp;
     mat->y = ytemp;
-    mat->rowIndex =(int*)calloc(mat->y + 1, sizeof(int));
+    mat->rowIndex = (int*)calloc(mat->y + 1, sizeof(int));
     mat->rowIndex[0] = 0;
     mat->rowLength = mat->y + 1;
-    int* numPerLine =(int*)calloc(ytemp, sizeof(int));
+    int* numPerLine = (int*)calloc(ytemp, sizeof(int));
 
     int amount;
     while ((amount = fscanf(in, "%d %d", &xtemp, &ytemp)) != EOF) {
@@ -98,7 +99,7 @@ ErrorCode readFile(FILE* in, t_data mat) {
     return COR;
 }
 
-void writeFile(FILE* out, t_data mat) {
+void writeTxt(FILE* out, t_data mat) {
     fprintf(out, "%d x %d\n", mat->y, mat->x);
     int colIterator = 0;
     for (int i = 1; i < mat->rowLength; i++) {
