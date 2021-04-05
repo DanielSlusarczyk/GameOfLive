@@ -110,4 +110,3 @@ void writeFile(FILE* out, t_data mat) {
     }
     fclose(out);
 }
-

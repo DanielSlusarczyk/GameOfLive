@@ -5,7 +5,6 @@
 #include "tgol_file.h"
 #include "tgol_evo.h"
 
-
 char dead = '.';
 char alive = 'X';
 
