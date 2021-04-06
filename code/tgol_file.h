@@ -30,7 +30,7 @@ typedef struct data {
     int* rowIndex;
     int colLength;
     int rowLength;
-} data, * t_data;
+} data, *t_data;
 
 bool contains(const char**, char*);
 ErrorCode readFile(FILE*, t_data);

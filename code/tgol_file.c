@@ -21,8 +21,8 @@ const char* Errors[10] = {
 bool contains(const char** array, char* s) {
     bool ret = false;
     int lim = sizeof(knownFlags) / sizeof(const char*);
-    for (int i = 0; i < lim; i++) {
-        if (strcmp(array[i], s) == 0) {
+    for(int i = 0; i < lim; i++) {
+        if(strcmp(array[i], s) == 0) {
             ret = true;
         }
     }
@@ -35,7 +35,7 @@ ErrorCode readFile(FILE* in, t_data mat) {
     mat->colLength = 0;
     mat->colIndex = NULL;
 
-    if (fscanf(in, "%d %s %d", &ytemp, tmp, &xtemp) != 3) {
+    if(fscanf(in, "%d %s %d", &ytemp, tmp, &xtemp) != 3) {
         fclose(in);
         return INPUT_DIMS;
     }
@@ -50,22 +50,22 @@ ErrorCode readFile(FILE* in, t_data mat) {
     int* numPerLine = (int*)calloc(ytemp, sizeof(int));
 
     int amount;
-    while ((amount = fscanf(in, "%d %d", &xtemp, &ytemp)) != EOF) {
-        if (amount == 2) {
-            if (xtemp > mat->x || ytemp > mat->y || xtemp < 1 || ytemp < 1) {
+    while((amount = fscanf(in, "%d %d", &xtemp, &ytemp)) != EOF) {
+        if(amount == 2) {
+            if(xtemp > mat->x || ytemp > mat->y || xtemp < 1 || ytemp < 1) {
                 fclose(in);
                 free(mat->rowIndex);
                 free(numPerLine);
                 return INPUT_LIMIT_XY;
             }
-            if (readRow < ytemp) {
+            if(readRow < ytemp) {
                 fclose(in);
                 free(mat->rowIndex);
                 free(mat->colIndex);
                 free(numPerLine);
                 return INPUT_INCORRECT_ORDER;
             }
-            if (readCol >= xtemp && readRow <= ytemp) {
+            if(readCol >= xtemp && readRow <= ytemp) {
                 fclose(in);
                 free(mat->rowIndex);
                 free(mat->colIndex);
@@ -89,7 +89,7 @@ ErrorCode readFile(FILE* in, t_data mat) {
     }
 
     int sum = 0;
-    for (int i = 1; i <= mat->y; i++) {
+    for(int i = 1; i <= mat->y; i++) {
         sum += numPerLine[i - 1];
         mat->rowIndex[i] = sum;
     }
@@ -102,9 +102,9 @@ ErrorCode readFile(FILE* in, t_data mat) {
 void writeTxt(FILE* out, t_data mat) {
     fprintf(out, "%d x %d\n", mat->y, mat->x);
     int colIterator = 0;
-    for (int i = 1; i < mat->rowLength; i++) {
+    for(int i = 1; i < mat->rowLength; i++) {
         int aliveCurrentRow = mat->rowIndex[i] - mat->rowIndex[i - 1];
-        for (int j = colIterator; j < colIterator + aliveCurrentRow; j++) {
+        for(int j = colIterator; j < colIterator + aliveCurrentRow; j++) {
             fprintf(out, "%d %d\n", mat->colIndex[j] + 1, mat->x - i + 1);
         }
         colIterator += aliveCurrentRow;

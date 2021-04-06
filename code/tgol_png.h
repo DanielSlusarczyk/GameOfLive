@@ -19,11 +19,8 @@ png_infop info_ptr;
 int number_of_passes;
 png_bytep* row_pointers;
 
-
-
 void generateImg(char*, t_data);
 void makeImg(int, t_data);
-void writeImg(char*);
-
+void writeImg(char*, int);
 
 #endif

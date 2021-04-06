@@ -42,6 +42,7 @@ int main(int argc, char** argv) {
 
     int n = DEFAULT_ARGC;
     while(n < argc) {
+        if(DEBUG) printf("zczytano symbol %s\n", argv[n]);
         if(argv[n][0] != '-') {
             printf("%s\n", Errors[UNKNOWN_FLAG - 1]);
             fclose(inFile);
@@ -53,22 +54,27 @@ int main(int argc, char** argv) {
                 fclose(inFile);
                 return UNKNOWN_FLAG;
             }
-            else if(strcmp(argv[n], "-sbs") == 0)
+            else if(strcmp(argv[n], "-sbs") == 0) {
                 sbs = true;
+            }  
             else if(strcmp(argv[n], "-save") == 0) {
                 if(overwrite) {
                     printf("%s\n", Errors[AMBIGUOUS_OUT - 1]);
                     fclose(inFile);
                     return AMBIGUOUS_OUT;
                 }
-		if(argc == n+1){
-			printf("%s\n", Errors[NO_OUT - 1]);
-			return NO_OUT;
-		}
+                if(argc == n + 1) {
+                    printf("%s\n", Errors[NO_OUT - 1]);
+                    return NO_OUT;
+                }
                 save = true;
                 if(argv[n + 1][0] != '-') {
-		            strcpy(fileName, argv[n+1]);
-                    outFile = fopen(strcat(argv[n + 1], txtExtension), "w");
+		            strcpy(fileName, argv[n + 1]);
+                    char* txtFileName = (char*)malloc(sizeof(argv[n + 1]));
+                    memcpy(txtFileName, argv[n + 1], sizeof(argv[n + 1]));
+                    strcat(txtFileName, txtExtension);
+                    outFile = fopen(txtFileName, "w");
+                    free(txtFileName);
                     if(outFile == NULL) {
                         printf("%s\n", Errors[NO_OUT - 1]);
                         fclose(inFile);
@@ -95,17 +101,18 @@ int main(int argc, char** argv) {
                 if(argv[n + 1] != NULL && argv[n + 1][0] != '-') {
                     sleepTime = atof(argv[++n]);
                     printf("wczytano czas odświeżenia ekranu: %.2lf\n", sleepTime);
-                    printf("wciśnij ENTER aby kontynuować\n");
+                    printf("wciśnij ENTER aby kontynuować");
                     getchar();
                 }
                 else {
                     sleepTime = 0.8;
                     printf("ustawiono domyślny czas odświeżenia ekranu: %.2lf\n", sleepTime);
-                    printf("wciśnij ENTER aby kontynuować\n");
+                    printf("wciśnij ENTER aby kontynuować");
                     getchar();
                 }
             }
         }
+        if(DEBUG) getchar();
         n++;
     }
 
@@ -121,12 +128,14 @@ int main(int argc, char** argv) {
     if(DEBUG) {
         printf("loaded %dx%d matrix from %s\n", mat.y, mat.x, argv[1]);
         printf("col index [ ");
-        for(int i = 0; i < mat.colLength; i++)
+        for(int i = 0; i < mat.colLength; i++) {
             printf("%d ", mat.colIndex[i]);
+        }
         printf("]\n");
         printf("row index [ ");
-        for(int i = 0; i < mat.rowLength; i++)
+        for(int i = 0; i < mat.rowLength; i++) {
             printf("%d ", mat.rowIndex[i]);
+        }
         printf("]\n");
     }
     if(!DEBUG) {
@@ -138,12 +147,12 @@ int main(int argc, char** argv) {
         tmpMat = newGeneration(matrix, 'm');
 	printf("GENERACJA NUMER: %d\n", i+1);
         if(CRSEquals(*matrix, *tmpMat)) {
-	    printMat(tmpMat);
+            printMat(tmpMat);
             printf("stan planszy ustalony, koniec programu\n");
-            printf("wciśnij ENTER aby kontynuować\n");
+            printf("wciśnij ENTER aby kontynuować");
             getchar();
-	    free(tmpMat->colIndex);
-	    free(tmpMat->rowIndex);
+            free(tmpMat->colIndex);
+            free(tmpMat->rowIndex);
             free(tmpMat);
             break;
         }
@@ -160,18 +169,19 @@ int main(int argc, char** argv) {
                 printf("press ENTER to continue\n");
                 getchar();
             }
-            else if(refresh)
+            else if(refresh) {
                 usleep(1000000 * sleepTime);
-            if(refresh && i!=atoi(argv[2])-1)
+            } 
+            if(refresh && i != atoi(argv[2]) - 1)
                 system("clear");
         }
         if(DEBUG) {
-            printf("Wymiary: %d x %d\n", matrix->y, matrix->x);
-            printf("ColIndex [ ");
+            printf("wymiary: %d x %d\n", matrix->y, matrix->x);
+            printf("col index = [ ");
             for(int i = 0; i < matrix->colLength; i++)
                 printf("%d ", matrix->colIndex[i]);
             printf("]\n");
-            printf("RowIndex [ ");
+            printf("row index = [ ");
             for(int i = 0; i < matrix->rowLength; i++)
                 printf("%d ", matrix->rowIndex[i]);
             printf("]\n");
