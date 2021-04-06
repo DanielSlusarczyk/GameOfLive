@@ -8,7 +8,9 @@
 #include "tgol_png.h"
 
 
-void generateImg(int width_x, int heigh_y, char* file_name, t_data mat) {
+void generateImg(char* file_name, t_data mat) {
+  int width_x = mat->x;
+  int heigh_y = mat->y;
   int sideLength = width_x > heigh_y ? (MAXDIM - MAXDIM % width_x)/width_x : (MAXDIM - MAXDIM % heigh_y)/heigh_y;
   makeImg(sideLength, mat);
   writeImg(file_name);
@@ -55,39 +57,39 @@ void makeImg(int sideLength, t_data mat) {
 }
 void writeImg(char* file_name) {
   FILE *fp = fopen(file_name, "wb");
-  if (!fp)
-    printf("[write_png_file] File %s could not be opened for writing", file_name);
+  if (fp == NULL)
+    printf("writeImg: Plik %s nie może zostać otwarty do zapisu\n", file_name);
 
   png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
 
   if (!png_ptr)
-    printf("[write_png_file] png_create_write_struct failed");
+    printf("writeImg: błąd funkcji png_create_write_struct\n");
 
   info_ptr = png_create_info_struct(png_ptr);
   if (!info_ptr)
-    printf("[write_png_file] png_create_info_struct failed");
+    printf("writeImg: błąd funkcji png_create_info_struct\n");
 
   if (setjmp(png_jmpbuf(png_ptr)))
-    printf("[write_png_file] Error during init_io");
+    printf("writeImg: błąd podczas inicjalizacji\n");
 
   png_init_io(png_ptr, fp);
 
   if (setjmp(png_jmpbuf(png_ptr)))
-    printf("[write_png_file] Error during writing header");
+    printf("writeImg: błąd podczas zapisu nagłówka\n");
 
   png_set_IHDR(png_ptr, info_ptr, width, height,
-   bit_depth, color_type, PNG_INTERLACE_NONE,
-   PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
+   	       bit_depth, color_type, PNG_INTERLACE_NONE,
+   	       PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
 
   png_write_info(png_ptr, info_ptr);
 
   if (setjmp(png_jmpbuf(png_ptr)))
-    printf("[write_png_file] Error during writing bytes");
+    printf("writeImg: błąd podczas zapisu poszczególnych bajtów");
 
   png_write_image(png_ptr, row_pointers);
 
   if (setjmp(png_jmpbuf(png_ptr)))
-    printf("[write_png_file] Error during end of write");
+    printf("writeImg: błąd końca zapisu");
 
   png_write_end(png_ptr, NULL);
 

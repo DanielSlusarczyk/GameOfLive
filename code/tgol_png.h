@@ -21,7 +21,7 @@ png_bytep* row_pointers;
 
 
 
-void generateImg(int, int, char*, t_data);
+void generateImg(char*, t_data);
 void makeImg(int, t_data);
 void writeImg(char*);
 

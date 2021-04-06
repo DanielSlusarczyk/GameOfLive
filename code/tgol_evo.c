@@ -12,7 +12,7 @@ void printMat(t_data mat) {
     int colIterator = 0;
     for (int i = 0; i < mat->y; i++) {
         for (int j = 0; j < mat->x; j++) {
-            if (mat->colIndex != NULL) {
+            if (mat->colIndex != NULL || colIterator == mat->rowIndex[mat->y] - 1) {
                 if (mat->colIndex[colIterator] == j && mat->rowIndex[i + 1] > colIterator) {
                     printf("%c ", alive);
                     colIterator++;
@@ -81,7 +81,7 @@ t_data newGeneration(t_data mat, char mode) {
             data = addCoordinates(mat, data, mat->colIndex[j], mat->y - i + 1, false); //góra
             data = addCoordinates(mat, data, mat->colIndex[j] + 1, mat->y - i, false); //prawo
             data = addCoordinates(mat, data, mat->colIndex[j], mat->y - i - 1, false); //dół
-            data = addCoordinates(mat, data, mat->colIndex[j], mat->y - i, true); //środek
+            data = addCoordinates(mat, data, mat->colIndex[j], mat->y - i, true);      //środek
             if (mode == 'm') {
                 data = addCoordinates(mat, data, mat->colIndex[j] - 1, mat->y - i + 1, false); //lewo-góra (moore)
                 data = addCoordinates(mat, data, mat->colIndex[j] + 1, mat->y - i + 1, false); //prawo-góra (moore)

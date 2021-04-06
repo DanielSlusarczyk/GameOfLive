@@ -138,10 +138,12 @@ int main(int argc, char** argv) {
         tmpMat = newGeneration(matrix, 'm');
 	printf("GENERACJA NUMER: %d\n", i+1);
         if(CRSEquals(*matrix, *tmpMat)) {
-	    printMat(matrix);
+	    printMat(tmpMat);
             printf("stan planszy ustalony, koniec programu\n");
             printf("wciśnij ENTER aby kontynuować\n");
             getchar();
+	    free(tmpMat->colIndex);
+	    free(tmpMat->rowIndex);
             free(tmpMat);
             break;
         }
@@ -178,14 +180,14 @@ int main(int argc, char** argv) {
 
     if(save) {
         writeTxt(outFile, matrix);
-	    generateImg(matrix->x, matrix->y, strcat(fileName, pngExtension), matrix);
+	    generateImg(strcat(fileName, pngExtension), matrix);
     }
     else if(overwrite) {
         outFile = fopen(argv[1], "w");
         writeTxt(outFile, matrix);
     }
-    free(tmpMat->colIndex);
-    free(tmpMat->rowIndex);
+    free(matrix->colIndex);
+    free(matrix->rowIndex);
     free(matrix);
 
     return 0;
