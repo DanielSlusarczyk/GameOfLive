@@ -12,7 +12,7 @@ void printMat(t_data mat) {
     int colIterator = 0;
     for (int i = 0; i < mat->y; i++) {
         for (int j = 0; j < mat->x; j++) {
-            if (mat->colIndex != NULL || colIterator == mat->rowIndex[mat->y] - 1) {
+            if (mat->colIndex != NULL && colIterator != mat->rowIndex[mat->y]) {
                 if (mat->colIndex[colIterator] == j && mat->rowIndex[i + 1] > colIterator) {
                     printf("%c ", alive);
                     colIterator++;
@@ -90,7 +90,7 @@ t_data newGeneration(t_data mat, char mode) {
             }
         }
     }
-    int* numPerLine =(int*)calloc(newMat->y, sizeof(int));
+    int* numPerLine =(int*)calloc(newMat->y + 1, sizeof(int));
     tmpdata = data;
     while (data != NULL) {
         if ((data->previousAlive == true && (data->neighbors == 2 || data->neighbors == 3)) || (data->previousAlive == false && data->neighbors == 3)) {
