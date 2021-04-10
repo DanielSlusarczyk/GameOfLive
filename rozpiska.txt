@@ -1,0 +1,15 @@
+Podstawowe uruchomienie:    ./TGOL ../input/glider.txt 10
+Domyślne flaga refresh:     ./TGOL ../input/glider.txt 10 -refresh
+Refresh z parametrem:       ./TGOL ../input/glider.txt 10 -refresh 0.5
+Flaga sbs:                  ./TGOL ../input/lwss.txt 50 -refresh
+Kombinacja sbs i refresh:	./TGOL ../input/mwss.txt 50 -sbs -refresh
+							./TGOL ../input/hwss.txt 50 -refresh -sbs
+Flaga save:                 ./TGOL ../input/glider.txt 10 -save ../output/glider_out
+Flaga overwrite:            ./TGOL ../input/beacon.txt 5 -overwrite -refresh
+                            ./TGOL ../input/toad.txt 5 -refresh -overwrite
+
+Bardziej skomplikowane wzory:
+    ./TGOL ../input/gosperglidergun.txt 150 -refresh -save ../output/gosper_out
+    ./TGOL ../input/simkinglidergun.txt 150 -refresh -save ../output/simkin_out
+    ./TGOL ../input/pulsar.txt 50 -refresh -overwrite
+    ./TGOL ../input/pentadecathlon.txt 50 -refresh -overwrite
