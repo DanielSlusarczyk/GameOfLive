@@ -19,4 +19,4 @@ Projekt _Game Of Life_ był pierwszą udaną próbą używania systemu kontroli 
 ![output_gosperglidergun3](https://user-images.githubusercontent.com/74370363/125439903-f3e09787-b159-4543-9a92-8fda0ef6777a.png)
 
 ### Plik wejściowy
-![input_glider](https://user-images.githubusercontent.com/74370363/125439913-a916688c-cbc2-4bad-8839-98e0633508f4.png)
+![input_gosperglidergun](https://user-images.githubusercontent.com/74370363/125440207-fe817715-f6b1-40e8-a31d-51491fd73571.png)
