@@ -11,3 +11,12 @@ Komórki znadujace sie poza plansza sa uznawane za martwe.
 
 ## Wnioski
 Projekt _Game Of Life_ był pierwszą udaną próbą używania systemu kontroli wersji GitHub. Pozwolił na lepsze zrozumienie języka C i podjęcie udanej próby zastosowania flag we własnym projekcie.
+
+## Wygląd
+###Przykładowe uruchomienie:
+![output_gosperglidergun2](https://user-images.githubusercontent.com/74370363/125439847-fc47b977-9030-447d-9f4b-7c2a551e3c85.png)
+![output_glider](https://user-images.githubusercontent.com/74370363/125439867-e7e6e8a4-782e-4a5c-8ded-943f8ac36ab5.png)
+![output_gosperglidergun3](https://user-images.githubusercontent.com/74370363/125439903-f3e09787-b159-4543-9a92-8fda0ef6777a.png)
+
+###Plik wejściowy
+![input_glider](https://user-images.githubusercontent.com/74370363/125439913-a916688c-cbc2-4bad-8839-98e0633508f4.png)
