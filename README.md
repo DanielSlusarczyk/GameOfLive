@@ -1,5 +1,6 @@
 # Game Of Live
-Program _Game Of Life_ emuluje działanie automatu komórkowego Johna Conwaya - **Gre w Zycie** (ang. _The Game of Life_). 
+Program _Game Of Life_ emuluje działanie automatu komórkowego Johna Conwaya - **Gre w Zycie** (ang. _The Game of Life_).  
+#### Autorzy: Daniel Ślusarczyk, Jakub Łaba
 
 ## Zasady
 Na prostokatnej planszy znajduja sie komórki zywe (zazwyczaj oznaczane kolorem czarnym) oraz martwe (zazwyczaj oznaczane kolorem białym, lub brakiem koloru). _Zycie_ na planszy toczy sie przez okreslona liczbe generacji, które sa rozdzielone dyskretnymi odstepami czasowymi. W kazdej generacji komórki ozywaja/obumieraja na nastepujacych
